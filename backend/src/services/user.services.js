@@ -41,6 +41,9 @@ export const fetchUsers = async () => {
         role: true,
         status: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
     return userList;
   } catch (error) {
