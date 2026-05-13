@@ -18,7 +18,6 @@ export const registerUser = async (dto) => {
 export const loginUser = async (dto) => {
   try {
     const { email, password } = dto;
-
     const user = await prisma.user.findUnique({
       where: { email },
     });
