@@ -40,9 +40,10 @@ export const myProfile = async (req, res, next) => {
 export const getUserList = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    const data = await fetchUsers(userId);
+    const { page, limit } = req.query;
+    const data = await fetchUsers(page, limit);
     return res.status(200).json({
-      users: data,
+      data: data,
     });
   } catch (error) {
     const status = error.status || 500;

@@ -32,20 +32,46 @@ export const getMyProfile = async (userId) => {
 };
 
 //******************************************* fetchUsers ******************************************//
-export const fetchUsers = async () => {
+export const fetchUsers = async (page, limit) => {
+  page = Math.max(Number(page) || 1, 1);
+  limit = Math.min(Math.max(Number(limit) || 1, 2), 50);
+  const offSet = (page - 1) * limit;
+
   try {
-    const userList = await prisma.user.findMany({
-      select: {
-        name: true,
-        email: true,
-        role: true,
-        status: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    return userList;
+    const [userList, totalusers] = await Promise.all([
+      prisma.user.findMany({
+        skip: offSet,
+        take: limit,
+        select: {
+          name: true,
+          email: true,
+          role: true,
+          status: true,
+        },
+
+        orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+      }),
+      prisma.user.count(),
+    ]);
+    // const userList = await prisma.user.findMany({
+    //   skip: offSet,
+    //   take: limit,
+    //   select: {
+    //     name: true,
+    //     email: true,
+    //     role: true,
+    //     status: true,
+    //   },
+
+    //   orderBy: [{ createdAt: "desc" }, { id: "desc" }],
+    // });
+    return {
+      page: page,
+      limit: limit,
+      totalusers,
+      totalPage: Math.ceil(totalusers / limit),
+      users: userList,
+    };
   } catch (error) {
     throw error;
   }
