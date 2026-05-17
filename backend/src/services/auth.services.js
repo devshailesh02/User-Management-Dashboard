@@ -39,7 +39,7 @@ export const loginUser = async (dto) => {
     const token = generateToken(user);
     const { password: _, ...safeUser } = user;
 
-    return { token, user: { ...safeUser } };
+    return { token, user: safeUser };
   } catch (error) {
     // ✅ Known error (already has status)
     if (error.status) {
