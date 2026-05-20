@@ -39,7 +39,7 @@ app.use(
  * Problem: Incoming request body is raw → req.body is undefined.
  * Solution: Parse JSON body into usable JS object.
  */
-app.use(express.json());
+// app.use(express.json({ limit: "100kb" }));
 
 /**
  * 🌐 CORS (Cross-Origin Resource Sharing)

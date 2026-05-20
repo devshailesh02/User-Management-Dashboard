@@ -8,6 +8,7 @@ import prisma from "../config/prisma.js";
 import { hashPassword } from "../utils/hash.js";
 
 const router = express.Router();
+router.use(express.json({ limit: "20kb" }));
 
 router.post("/register", val_Register, register);
 router.post("/login", val_login, login);
