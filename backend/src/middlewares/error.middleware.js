@@ -3,7 +3,6 @@ import multer from "multer";
 const errorHandler = (err, req, res, next) => {
   let statusCode = err.status || 500;
   let message = err.message || "Internal Server Error";
-
   /**
    * Multer Errors
    */

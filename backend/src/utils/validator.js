@@ -27,12 +27,12 @@ export const validName = (name) => {
     };
   }
 
-  // if (trimmed.length > 50) {
-  //   return {
-  //     success: false,
-  //     message: "Name must not exceed 50 characters",
-  //   };
-  // }
+  if (trimmed.length > 50) {
+    return {
+      success: false,
+      message: "Name must not exceed 50 characters",
+    };
+  }
 
   // Pattern check
   if (!/^[A-Za-z0-9\s]+$/.test(trimmed)) {

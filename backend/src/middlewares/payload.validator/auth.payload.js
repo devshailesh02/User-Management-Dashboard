@@ -43,7 +43,6 @@ export const val_Register = async (req, res, next) => {
 // ******************************* login validator *********************************************//
 export const val_login = (req, res, next) => {
   const { email, password } = req.body || {};
-
   const emailError = validEmail(email);
   if (emailError.success === false) {
     const error = new Error(emailError.message);
