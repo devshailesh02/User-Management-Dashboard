@@ -53,6 +53,13 @@ app.use(
 );
 
 /**
+ * 📂 Static File Serving
+ * Problem: Uploaded files saved on disk are not accessible via browser.
+ * Solution: Expose uploads folder publicly through HTTP.
+ */
+app.use("/uploads", express.static("upload"));
+
+/**
  * 🛣️ Routes
  * Problem: Need modular, scalable routing instead of putting everything in one file.
  * Solution: Mount auth routes under /auth
