@@ -1,7 +1,7 @@
 import createMulter from "../../config/multer";
 
 const uploadVideo = createMulter({
-  folder: "uploads/videos/",
+  folder: "upload/videos/",
 
   allowedMimeTypes: ["video/mp4", "video/webm"],
 
