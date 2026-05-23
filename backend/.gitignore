@@ -1,12 +1,12 @@
 node_modules
 # Keep environment variables out of version control
 .env
-/uploads/*
+/upload/*
 
-!/uploads/avatar/
-!/uploads/avatar/.gitkeep
+!/upload/avatar/
+!/upload/avatar/.gitkeep
 
-!/uploads/videos/
-!/uploads/videos/.gitkeep
+!/upload/videos/
+!/upload/videos/.gitkeep
 
 /src/generated/prisma
