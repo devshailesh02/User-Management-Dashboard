@@ -6,7 +6,7 @@ import crypto from "crypto";
  * Reusable multer factory
  */
 const createMulter = ({
-  folder,
+  // folder,
   allowedMimeTypes,
   allowedExtensions,
   maxFileSize,
@@ -14,21 +14,28 @@ const createMulter = ({
   /**
    * Storage configuration
    */
-  const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, folder);
-    },
+  // const storage = multer.diskStorage({
+  //   destination: (req, file, cb) => {
+  //     cb(null, folder);
+  //   },
 
-    filename: (req, file, cb) => {
-      const extension = path.extname(file.originalname).toLowerCase();
+  //   filename: (req, file, cb) => {
+  //     const extension = path.extname(file.originalname).toLowerCase();
 
-      const uniqueName = crypto.randomUUID() + extension;
+  //     const uniqueName = crypto.randomUUID() + extension;
 
-      cb(null, uniqueName);
-    },
-  });
+  //     cb(null, uniqueName);
+  //   },
+  // });
 
   /**
+   * Store file in memory temporarily
+   */
+  const storage = multer.memoryStorage();
+
+  /**
+  /**
+   * 
    * File validation
    */
   const fileFilter = (req, file, cb) => {
@@ -41,7 +48,7 @@ const createMulter = ({
     if (isValidMime && isValidExtension) {
       cb(null, true);
     } else {
-      cb(new Error("Invalid file type"), false);
+      cb(new Error("Invalid file"), false);
     }
   };
 

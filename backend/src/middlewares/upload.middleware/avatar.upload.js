@@ -1,7 +1,7 @@
 import createMulter from "../../config/multer.js";
 
 const uploadAvatar = createMulter({
-  folder: "upload/avatar/",
+  // folder: "upload/avatar/",
 
   allowedMimeTypes: ["image/png", "image/jpeg", "image/webp"],
 
