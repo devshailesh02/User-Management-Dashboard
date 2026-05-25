@@ -3,10 +3,10 @@ node_modules
 .env
 /upload/*
 
-!/upload/avatar/
-!/upload/avatar/.gitkeep
+upload/avatar/*
+!upload/avatar/.gitkeep
 
-!/upload/videos/
-!/upload/videos/.gitkeep
+upload/videos/*
+!upload/videos/.gitkeep
 
 /src/generated/prisma
