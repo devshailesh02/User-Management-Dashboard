@@ -8,6 +8,7 @@ import {
 } from "../controllers/user.controller.js";
 import { validateStatusUpdate } from "../middlewares/payload.validator/user.payload.js";
 import uploadAvatar from "../middlewares/upload.middleware/avatar.upload.js";
+import optimizeImage from "../middlewares/upload.middleware/optimizeImage.middleware.js";
 
 const router = express.Router();
 
@@ -18,8 +19,9 @@ router.get("/me", myProfile);
 router.post(
   "/profile-image",
   uploadAvatar.single("avatar"),
+  optimizeImage,
   (req, res, next) => {
-    return res.status(201).json({ message: req.file });
+    return res.status(201).json({ message: "saved" });
   },
 );
 router.get("/alluser", authorize("admin"), getUserList);
