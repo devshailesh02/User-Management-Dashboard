@@ -34,7 +34,7 @@ router.post("/admin", async (req, res) => {
       .status(201)
       .json({ message: "admin created successfully.", user });
   } catch (error) {
-    return res.status(500).json({
+    return res.status(error.status || 500).json({
       message: error.message || "Internal server error",
     });
   }

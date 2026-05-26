@@ -6,6 +6,7 @@ CREATE TABLE `User` (
     `password` VARCHAR(191) NOT NULL,
     `role` VARCHAR(191) NOT NULL DEFAULT 'user',
     `status` VARCHAR(191) NOT NULL DEFAULT 'active',
+    `avatar_url` JSON NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
 
     UNIQUE INDEX `User_email_key`(`email`),
