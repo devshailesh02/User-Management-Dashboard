@@ -23,6 +23,7 @@ const optimizeImage = async (req, res, next) => {
         await sharp(req.file.buffer)
           .resize(variant.width, variant.height, {
             fit: "cover",
+            position: sharp.strategy.attention,
           })
           .webp({
             quality: variant.quality,

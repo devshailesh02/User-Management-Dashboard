@@ -23,6 +23,7 @@ export const getMyProfile = async (userId) => {
         name: true,
         status: true,
         role: true,
+        avatar_url: true,
       },
     });
     return details;
