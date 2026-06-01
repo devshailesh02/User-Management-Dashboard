@@ -77,3 +77,13 @@ export const fetchUsers = async (page, limit) => {
     throw error;
   }
 };
+
+// ****************************************** Add Role *******************************
+
+export const addRole = async (role) => {
+  try {
+    await prisma.Role.Create({ name: role });
+  } catch (error) {
+    throw error;
+  }
+};

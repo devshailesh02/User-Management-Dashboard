@@ -1,4 +1,5 @@
 import {
+  addRole,
   fetchUsers,
   getMyProfile,
   userStatus,
@@ -50,5 +51,17 @@ export const getUserList = async (req, res, next) => {
     return res.status(status).json({
       message: error.message || "internal server error",
     });
+  }
+};
+
+// ************************************** create role ***********************************
+
+export const createrole = async (req, res, next) => {
+  try {
+    const role = req.body.role;
+    await addRole(role);
+    return res.status(201).json({ message: "Role created successfully" });
+  } catch (error) {
+    next(error);
   }
 };

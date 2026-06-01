@@ -27,7 +27,6 @@ router.post("/admin", async (req, res) => {
         email,
         password: hashedPassword,
         name,
-        role: "admin",
       },
     });
     return res

@@ -2,6 +2,7 @@ import express from "express";
 import { authenticate } from "../middlewares/authenticate.user.js";
 import { authorize } from "../middlewares/authorize.user.js";
 import {
+  createrole,
   getUserList,
   myProfile,
   updateStatus,
@@ -25,5 +26,6 @@ router.post(
   },
 );
 router.get("/alluser", authorize("admin"), getUserList);
+router.post("/create-role", authorize("admin"), createrole);
 
 export default router;
