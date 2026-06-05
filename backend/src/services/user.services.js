@@ -22,7 +22,7 @@ export const getMyProfile = async (userId) => {
         email: true,
         name: true,
         status: true,
-        role: true,
+        // role: true,
         avatar_url: true,
       },
     });

@@ -8,7 +8,7 @@ export const validateStatusUpdate = (req, res, next) => {
   }
 
   // optional: strict validation
-  const allowed = ["active", "inactive"];
+  const allowed = ["active", "inactive", "deleted"];
   if (!allowed.includes(status)) {
     return res.status(400).json({
       message: "Invalid status value",

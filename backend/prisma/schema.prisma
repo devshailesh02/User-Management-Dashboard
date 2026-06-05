@@ -15,6 +15,7 @@ model User {
   password  String 
   status    String   @default("active")
   avatar_url    Json?
+  role_id Int?  @default(2)
   createdAt DateTime @default(now())
 }
 
