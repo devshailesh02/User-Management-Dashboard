@@ -8,9 +8,10 @@ export const register = async (req, res, next) => {
       message: "registered successfully.",
     });
   } catch (error) {
-    res.status(209).json({
-      message: "user already registered.",
-    });
+    // res.status(209).json({
+    //   message: "user already registered.",
+    // });
+    next(error);
   }
 };
 

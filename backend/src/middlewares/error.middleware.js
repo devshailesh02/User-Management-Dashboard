@@ -1,8 +1,19 @@
 import multer from "multer";
+import { Prisma } from "@prisma/client";
 
 const errorHandler = (err, req, res, next) => {
-  let statusCode = err.status || 500;
+  // Log full error internally
+  console.error({
+    message: err.message,
+    stack: err.stack,
+    method: req.method,
+    path: req.originalUrl,
+    timestamp: new Date().toISOString(),
+  });
+
+  let statusCode = err.statusCode || err.status || 500;
   let message = err.message || "Internal Server Error";
+
   /**
    * Multer Errors
    */
@@ -23,22 +34,57 @@ const errorHandler = (err, req, res, next) => {
         break;
 
       default:
-        message = err.message;
+        message = "File upload failed";
     }
-  }
-
-  /**
-   * Custom File Validation Error
-   */
-  if (err.message === "Invalid file type") {
+  } else if (err.message === "Invalid file type") {
+    /**
+     * Custom File Validation
+     */
     statusCode = 400;
+    message = "Invalid file type";
+  } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    /**
+     * Prisma Errors
+     */
+    switch (err.code) {
+      case "P2002":
+        statusCode = 409;
+        message = "Resource already exists";
+        break;
+
+      case "P2003":
+        statusCode = 400;
+        message = "Invalid reference data";
+        break;
+
+      case "P2025":
+        statusCode = 404;
+        message = "Requested resource not found";
+        break;
+
+      default:
+        statusCode = 500;
+        message = "Database operation failed";
+    }
+  } else if (err instanceof Prisma.PrismaClientInitializationError) {
+    /**
+     * Prisma Connection Errors
+     */
+    statusCode = 500;
+    message = "Database unavailable";
+  } else if (statusCode === 500) {
+    /**
+     * Unknown Errors
+     */
+    message = "Something went wrong";
   }
 
-  res.status(statusCode).json({
+  return res.status(statusCode).json({
     success: false,
     message,
 
     ...(process.env.NODE_ENV === "development" && {
+      error: err.name,
       stack: err.stack,
     }),
   });
