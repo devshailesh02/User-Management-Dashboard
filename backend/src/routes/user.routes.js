@@ -26,7 +26,7 @@ router.post(
     return res.status(201).json({ message: "saved" });
   },
 );
-router.get("/alluser", authorize("admin"), getUserList);
+router.get("/alluser", authorize("admin", "superadmin"), getUserList);
 router.post("/create-role", authorize("admin"), createrole);
 
 export default router;

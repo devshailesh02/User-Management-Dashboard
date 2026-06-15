@@ -23,6 +23,6 @@ model User {
 model Role {
   id Int @id @default(autoincrement())
   name String @unique
-
+  created_by String @@index
   users User[]
 }

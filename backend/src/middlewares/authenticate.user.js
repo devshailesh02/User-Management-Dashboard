@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import { getMyProfile } from "../services/user.services.js";
 
-export const authenticate = (req, res, next) => {
+export const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -13,8 +14,17 @@ export const authenticate = (req, res, next) => {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decoded;
-
+    const user = await getMyProfile(decoded.id);
+    if (!user) {
+      return res.status(401).json({ message: "User no longer exists" });
+    }
+    if (user.status !== "active") {
+      return res.status(403).json({
+        message: "Account is inactive",
+      });
+    }
+    const details = { ...user, role: user.role.name };
+    req.user = details;
     next();
   } catch (error) {
     return res.status(401).json({

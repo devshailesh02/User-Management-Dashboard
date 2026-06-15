@@ -19,6 +19,7 @@ export const getMyProfile = async (userId) => {
     const details = await prisma.user.findUnique({
       where: { id: userId },
       select: {
+        id: true,
         email: true,
         name: true,
         status: true,
@@ -26,6 +27,12 @@ export const getMyProfile = async (userId) => {
         role: true,
       },
     });
+
+    // if (!details) {
+    //   const error = new Error("User not found.");
+    //   error.status(404);
+    //   throw error;
+    // }
     return details;
   } catch (error) {
     throw error;
@@ -46,14 +53,20 @@ export const fetchUsers = async (page, limit) => {
         select: {
           name: true,
           email: true,
-          role: true,
           status: true,
+          role: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
 
         orderBy: [{ createdAt: "desc" }, { id: "desc" }],
       }),
       prisma.user.count(),
     ]);
+    console.log("user-list", userList);
     // const userList = await prisma.user.findMany({
     //   skip: offSet,
     //   take: limit,

@@ -33,6 +33,9 @@ export const loginUser = async (dto) => {
     const { email, password } = dto;
     const user = await prisma.user.findUnique({
       where: { email },
+      include: {
+        role: true,
+      },
     });
 
     if (!user) {
@@ -48,7 +51,6 @@ export const loginUser = async (dto) => {
       error.status = 401;
       throw error;
     }
-
     const token = generateToken(user);
     const { password: _, ...safeUser } = user;
 
@@ -58,7 +60,6 @@ export const loginUser = async (dto) => {
     if (error.status) {
       throw error;
     }
-
     // ❌ Unknown error → convert to 500
     const err = new Error("Internal Server Error");
     err.status = 500;
