@@ -5,9 +5,6 @@ import { generateToken } from "../utils/token.js";
 // ------------- registerUser service----------------//
 export const registerUser = async (dto) => {
   try {
-    // const user = await prisma.user.create({
-    //   data: dto,
-    // });
     const { name, email, password } = dto;
     const user = await prisma.user.create({
       data: {

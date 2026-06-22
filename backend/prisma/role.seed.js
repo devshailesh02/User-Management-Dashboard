@@ -4,7 +4,7 @@ import prisma from "../src/config/prisma.js";
 
 async function main() {
   await prisma.role.createMany({
-    data: [{ name: "superadmin" }, { name: "admin" }, { name: "user" }],
+    data: [{ name: "superadmin" }, { name: "admin" }],
     skipDuplicates: true,
   });
 }
