@@ -4,17 +4,17 @@ import bcrypt from "bcrypt";
 async function main() {
   const password = await bcrypt.hash("SuperAdmin@123", 10);
 
-  await prisma.user.create({
+  await prisma.company.create({
     data: {
       name: "Super Admin",
       email: "superadmin@example.com",
       password,
-
-      role: {
-        connect: {
-          name: "superadmin",
-        },
-      },
+      role: "superadmin",
+      // role: {
+      //   connect: {
+      //     name: "superadmin",
+      //   },
+      // },
     },
   });
 }

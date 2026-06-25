@@ -1,21 +1,22 @@
 import prisma from "../config/prisma.js";
-import { comparePassword } from "../utils/hash.js";
+import { comparePassword, hashPassword } from "../utils/hash.js";
 import { generateToken } from "../utils/token.js";
 
 // ------------- registerUser service----------------//
-export const registerUser = async (dto) => {
+export const registerCompany = async (dto) => {
   try {
     const { name, email, password } = dto;
-    const user = await prisma.user.create({
+    const hashed = await hashPassword(password);
+    const user = await prisma.company.create({
       data: {
         name,
         email,
-        password,
-        role: {
-          connect: {
-            name: "user",
-          },
-        },
+        password: hashed,
+        // role: {
+        //   connect: {
+        //     name: "admin",
+        //   },
+        // },
       },
     });
     return user;
@@ -28,10 +29,10 @@ export const registerUser = async (dto) => {
 export const loginUser = async (dto) => {
   try {
     const { email, password } = dto;
-    const user = await prisma.user.findUnique({
+    const user = await prisma.company.findUnique({
       where: { email },
       include: {
-        role: true,
+        roles: true,
       },
     });
 

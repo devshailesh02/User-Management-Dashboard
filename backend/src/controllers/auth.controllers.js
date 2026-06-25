@@ -1,9 +1,9 @@
-import { loginUser, registerUser } from "../services/auth.services.js";
+import { loginUser, registerCompany } from "../services/auth.services.js";
 
 export const register = async (req, res, next) => {
   try {
     const dto = req.dto;
-    const user = await registerUser(dto);
+    const user = await registerCompany(dto);
     res.status(201).json({
       message: "registered successfully.",
     });
