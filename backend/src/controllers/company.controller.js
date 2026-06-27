@@ -1,24 +1,21 @@
-import { loginUser, registerCompany } from "../services/auth.services.js";
+import { loginCompany, registerCompany } from "../services/company.service.js";
 
 export const register = async (req, res, next) => {
   try {
-    const dto = req.dto;
-    const user = await registerCompany(dto);
+    const user = await registerCompany(req.dto);
     res.status(201).json({
       message: "registered successfully.",
     });
   } catch (error) {
-    // res.status(209).json({
-    //   message: "user already registered.",
-    // });
     next(error);
   }
 };
 
+// --------------------------------------------------------------------------//
+
 export const login = async (req, res, next) => {
   try {
-    const dto = req.dto;
-    const user = await loginUser(dto);
+    const user = await loginCompany(req.dto);
 
     return res.status(200).json({
       message: "login successfully.",

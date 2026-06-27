@@ -3,7 +3,7 @@ import cors from "cors";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import errorHandler from "./middlewares/error.middleware.js";
-import authRoutes from "./routes/auth.routes.js";
+import companyRoutes from "./routes/company.routes.js";
 import userRoutes from "./routes/user.routes.js";
 
 const app = express();
@@ -64,7 +64,7 @@ app.use("/uploads", express.static("upload"));
  * Problem: Need modular, scalable routing instead of putting everything in one file.
  * Solution: Mount auth routes under /auth
  */
-app.use("/auth", authRoutes);
+app.use("/company", companyRoutes);
 app.use("/user", userRoutes);
 
 /**

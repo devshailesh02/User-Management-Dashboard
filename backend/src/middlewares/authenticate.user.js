@@ -16,7 +16,7 @@ export const authenticate = async (req, res, next) => {
 
     const user = await getMyProfile(decoded.id);
     if (!user) {
-      return res.status(401).json({ message: "User no longer exists" });
+      return res.status(401).json({ message: "User account not found." });
     }
     if (user.status !== "active") {
       return res.status(403).json({

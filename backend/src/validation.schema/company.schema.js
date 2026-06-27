@@ -1,5 +1,20 @@
 import * as yup from "yup";
 
+//------------------------------------- loginSchema -----------------------------------------//
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .required("Email is required")
+    .email("Invalid email address")
+    .max(254, "Email cannot exceed 254 characters"),
+
+  password: yup.string().required("Password is required"),
+});
+
+//------------------------------------- registerSchema -----------------------------------------//
+
 export const registerSchema = yup.object({
   name: yup
     .string()

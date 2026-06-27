@@ -2,7 +2,6 @@ import prisma from "../config/prisma.js";
 import { comparePassword, hashPassword } from "../utils/hash.js";
 import { generateToken } from "../utils/token.js";
 
-// ------------- registerUser service----------------//
 export const registerCompany = async (dto) => {
   try {
     const { name, email, password } = dto;
@@ -12,11 +11,6 @@ export const registerCompany = async (dto) => {
         name,
         email,
         password: hashed,
-        // role: {
-        //   connect: {
-        //     name: "admin",
-        //   },
-        // },
       },
     });
     return user;
@@ -25,8 +19,7 @@ export const registerCompany = async (dto) => {
   }
 };
 
-// ------------- loginUser service----------------//
-export const loginUser = async (dto) => {
+export const loginCompany = async (dto) => {
   try {
     const { email, password } = dto;
     const user = await prisma.company.findUnique({

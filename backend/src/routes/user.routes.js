@@ -16,6 +16,8 @@ const router = express.Router();
 router.use(express.json({ limit: "20kb" }));
 router.use(authenticate);
 
+router.post("/create-role", authorize("admin"));
+
 router.put("/status", authorize("admin"), validateStatusUpdate, updateStatus);
 router.get("/me", myProfile);
 router.post(
