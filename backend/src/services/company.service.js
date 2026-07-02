@@ -1,7 +1,8 @@
 import prisma from "../config/prisma.js";
 import { comparePassword, hashPassword } from "../utils/hash.js";
-import { generateToken } from "../utils/token.js";
+import { generateCompanyToken } from "../utils/token.js";
 
+//--------------------------------------------- registerCompany --------------------------------------------//
 export const registerCompany = async (dto) => {
   try {
     const { name, email, password } = dto;
@@ -18,6 +19,8 @@ export const registerCompany = async (dto) => {
     throw error;
   }
 };
+
+//--------------------------------------------- loginCompany --------------------------------------------//
 
 export const loginCompany = async (dto) => {
   try {
@@ -42,7 +45,7 @@ export const loginCompany = async (dto) => {
       error.status = 401;
       throw error;
     }
-    const token = generateToken(user);
+    const token = generateCompanyToken(user);
     const { password: _, ...safeUser } = user;
 
     return { token, user: safeUser };
@@ -56,4 +59,54 @@ export const loginCompany = async (dto) => {
     err.status = 500;
     throw err;
   }
+};
+
+//--------------------------------------------- getCompanyProfile --------------------------------------------//
+
+export const getCompanyProfile = async (companyId) => {
+  const company = await prisma.company.findUnique({
+    where: {
+      id: companyId,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      status: true,
+    },
+  });
+
+  return company;
+};
+//---------------------------------------------getCompanies----------------------------------------------------//
+
+export const getAllCompanies = ({
+  status,
+  search,
+  page,
+  limit,
+  sortBy,
+  order,
+}) => {
+  return prisma.company.findMany();
+};
+
+//---------------------------------------------- updateCompany -------------------------------------------------//
+
+export const updateCompanyStatus = async (company_id, status) => {
+  return prisma.company.update({
+    where: {
+      id: company_id,
+    },
+    data: { status },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
 };

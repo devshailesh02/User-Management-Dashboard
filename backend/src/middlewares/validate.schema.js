@@ -3,6 +3,7 @@ export const validate = (schema) => async (req, res, next) => {
     req.dto = await schema.validate(req.body, {
       abortEarly: false,
       stripUnknown: true,
+      strict: true,
     });
 
     next();

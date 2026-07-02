@@ -1,17 +1,5 @@
 import * as yup from "yup";
-
-//------------------------------------- loginSchema -----------------------------------------//
-
-export const loginSchema = yup.object({
-  email: yup
-    .string()
-    .trim()
-    .required("Email is required")
-    .email("Invalid email address")
-    .max(254, "Email cannot exceed 254 characters"),
-
-  password: yup.string().required("Password is required"),
-});
+import { CompanyStatus } from "@prisma/client";
 
 //------------------------------------- registerSchema -----------------------------------------//
 
@@ -55,4 +43,22 @@ export const registerSchema = yup.object({
     .string()
     .required("Confirm password is required")
     .oneOf([yup.ref("password")], "Passwords do not match"),
+});
+
+//------------------------------------- loginSchema -----------------------------------------//
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .required("Email is required")
+    .email("Invalid email address")
+    .max(254, "Email cannot exceed 254 characters"),
+
+  password: yup.string().required("Password is required"),
+});
+
+//------------------------------------- updateCompanyStatusSchema -----------------------------------------//
+export const updateCompanyStatusSchema = yup.object({
+  status: yup.string().oneOf(Object.values(CompanyStatus)).required(),
 });

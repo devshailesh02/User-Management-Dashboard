@@ -10,11 +10,6 @@ async function main() {
       email: "superadmin@example.com",
       password,
       role: "superadmin",
-      // role: {
-      //   connect: {
-      //     name: "superadmin",
-      //   },
-      // },
     },
   });
 }
