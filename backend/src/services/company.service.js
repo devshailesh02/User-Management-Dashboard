@@ -79,20 +79,79 @@ export const getCompanyProfile = async (companyId) => {
 
   return company;
 };
-//---------------------------------------------getCompanies----------------------------------------------------//
+//---------------------------------------------getCompaniesService----------------------------------------------------//
 
-export const getAllCompanies = ({
+export const getAllCompanies = async ({
   status,
   search,
-  page,
-  limit,
-  sortBy,
-  order,
+  startDate,
+  endDate,
+  page = 1,
+  limit = 10,
+  sortBy = "createdAt",
+  order = "desc",
 }) => {
-  return prisma.company.findMany();
+  const where = {};
+
+  if (status) {
+    where.status = status;
+  } else {
+    where.status = {
+      not: "suspended",
+    };
+  }
+
+  if (search) {
+    where.OR = [
+      {
+        name: {
+          contains: search,
+        },
+      },
+      {
+        email: {
+          contains: search,
+        },
+      },
+    ];
+  }
+
+  if (startDate || endDate) {
+    where.createdAt = {};
+
+    if (startDate) {
+      where.createdAt.gte = new Date(startDate);
+    }
+
+    if (endDate) {
+      // Optional: make endDate inclusive
+      const end = new Date(endDate);
+      end.setDate(end.getDate() + 1);
+
+      where.createdAt.lt = end;
+    }
+  }
+
+  return prisma.company.findMany({
+    where,
+    skip: (page - 1) * Number(limit),
+    take: Number(limit),
+    orderBy: {
+      [sortBy]: order,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      status: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
 };
 
-//---------------------------------------------- updateCompany -------------------------------------------------//
+//---------------------------------------------- updateCompanyService -------------------------------------------------//
 
 export const updateCompanyStatus = async (company_id, status) => {
   return prisma.company.update({
@@ -107,6 +166,37 @@ export const updateCompanyStatus = async (company_id, status) => {
       status: true,
       createdAt: true,
       updatedAt: true,
+    },
+  });
+};
+
+//---------------------------------------------deleteCompaniesService----------------------------------------------------//
+
+export const deleteCompanies = async (company_id) => {
+  return prisma.company.update({
+    where: {
+      id: company_id,
+    },
+    data: {
+      status: "suspended",
+      deletedAt: new Date(),
+    },
+  });
+};
+
+//---------------------------------------------deleteManyCompanies----------------------------------------------------//
+
+export const deleteManyCompanies = async (companyIds) => {
+  return prisma.company.updateMany({
+    where: {
+      id: {
+        in: companyIds,
+      },
+      deletedAt: null, // Don't update already deleted companies
+    },
+    data: {
+      status: "suspended",
+      deletedAt: new Date(),
     },
   });
 };

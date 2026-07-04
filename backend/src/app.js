@@ -64,7 +64,7 @@ app.use("/uploads", express.static("upload"));
  * Problem: Need modular, scalable routing instead of putting everything in one file.
  * Solution: Mount auth routes under /auth
  */
-app.use("/company", companyRoutes);
+app.use("/companies", companyRoutes);
 app.use("/user", userRoutes);
 
 /**

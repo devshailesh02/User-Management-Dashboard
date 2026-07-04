@@ -62,3 +62,20 @@ export const loginSchema = yup.object({
 export const updateCompanyStatusSchema = yup.object({
   status: yup.string().oneOf(Object.values(CompanyStatus)).required(),
 });
+
+//------------------------------------- deleteManyCompaniesSchema -----------------------------------------//
+export const deleteManyCompaniesSchema = yup.object({
+  company_ids: yup
+    .array()
+    .of(yup.string().uuid("Each company ID must be a valid UUID").required())
+    .min(1, "At least one company ID is required")
+    .test(
+      "unique-company-ids",
+      "Duplicate company IDs are not allowed",
+      (value) => {
+        if (!value) return true;
+        return new Set(value).size === value.length;
+      },
+    )
+    .required("company_ids is required"),
+});
