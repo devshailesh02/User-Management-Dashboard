@@ -31,7 +31,7 @@ router.use(authenticate);
 router.get("/", authorize("superadmin"), getAllCompaniesController);
 router.get(
   "/:company_id",
-  authorize("superadmin", "admin"),
+  authorize("superadmin"),
   loadCompany,
   getCompanyByIdController,
 );
