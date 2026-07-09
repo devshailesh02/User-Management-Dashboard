@@ -1,69 +1,46 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Navbar from "./components/navbar";
+import { useData } from "./components/customhook";
 
-const debounce = (func) => {
-  let timer = null;
-
-  return () => {
-    if (timer) clearTimeout(timer);
-    timer = setTimeout(func, 500);
-  };
-};
-
-const callback = () => {
-  console.log("scrolled", window.scrollY);
-};
 function App() {
+  const [data, setdata] = useState(99);
+  const newdata = useData();
   // useEffect(() => {
-  //   const handlescroll = debounce(callback);
-
-  //   window.addEventListener("scroll", handlescroll);
-
-  //   return window.removeEventListener("scroll", handlescroll);
+  //   setTimeout(() => {
+  //     console.log("state data", data);
+  //   }, 5000);
   // }, []);
-  let [timer, setTimer] = useState(false);
-  let [time, settime] = useState(0);
-  useEffect(() => {
-    let interval;
-    if (timer) {
-      interval = setInterval(() => {
-        settime((prev) => prev + 1);
-        // settime(time + 1);
-      }, 1000);
-    }
+  const promise = new Promise((res, rej) =>
+    setTimeout(() => res(2000000), 5000),
+  );
+  promise.then((data) => console.log("resolved with data", data));
+  console.log("after promise");
 
-    return () => clearInterval(interval);
-  }, [timer]);
-
-  useEffect(() => {
-    window.addEventListener("online", () => {
-      console.log("i am online");
-    });
-    window.addEventListener("offline", () => {
-      console.log("i am ofline");
-    });
-  }, []);
-
-  const handlelog = (e) => {
-    setTimeout(() => {
-      console.log(time, e.target);
-    }, 5000);
-  };
   return (
     <>
-      <button onClick={() => setTimer(true)}>start</button>
-      <button onClick={() => setTimer(false)}>stop</button>
-      <button
-        onClick={() => {
-          setTimer(false);
-          settime(0);
-        }}
-      >
-        reset
-      </button>
-      <button onClick={handlelog}>log count</button>
-      <h1>{time}</h1>
-      <div style={{ height: "3000px" }}>Scroll Me</div>;
+      <div className="min-h-screen flex items-center justify-between bg-gray-100">
+        <h1 className="text-5xl font-bold text-blue-600">
+          Tailwind CSS is working!
+        </h1>
+      </div>
+      <Navbar />
+      <button onClick={() => setdata((prev) => prev + 1)}>increase</button>
+      {Array(5)
+        .fill(5)
+        .map((_, index) => (
+          <div
+            id="div1"
+            style={{
+              height: "20vh",
+              margin: "15px",
+              border: "2px solid grey",
+              display: "flex",
+            }}
+          >
+            AAAAAA
+          </div>
+        ))}
     </>
   );
 }

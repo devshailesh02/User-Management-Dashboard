@@ -1,0 +1,33 @@
+.pseudo::before {
+ content: "★";
+}
+a:active {
+    color: blue;
+    text-decoration: none;
+    /* background-color: rgb(226, 46, 14); */
+}
+
+.navbar{
+    display: flex;
+    height: 70px;
+    padding: 10px 50px;
+    border: 1px solid grey;
+    box-shadow: cadetblue;
+    align-items: center;
+    justify-content: space-between;
+}
+.nav-items{
+    display: flex;
+    gap: 15px;
+}
+.nav-items li{
+    list-style: none;
+}
+.hamburger{
+    display: none;
+}
+@media (max-width: 760px) {
+    .hamburger {
+        display: block;
+    }
+}
