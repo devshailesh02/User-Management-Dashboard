@@ -1,6 +1,9 @@
 import prisma from "../config/prisma.js";
 import { comparePassword, hashPassword } from "../utils/hash.js";
-import { generateCompanyToken } from "../utils/token.js";
+import {
+  generateCompanyAccessToken,
+  generateCompanyRefreshToken,
+} from "../utils/token.js";
 
 //--------------------------------------------- registerCompany --------------------------------------------//
 export const registerCompany = async (dto) => {
@@ -45,10 +48,11 @@ export const loginCompany = async (dto) => {
       error.status = 401;
       throw error;
     }
-    const token = generateCompanyToken(user);
+    const accessToken = generateCompanyAccessToken(user);
+    const refreshToken = generateCompanyRefreshToken(user);
     const { password: _, ...safeUser } = user;
 
-    return { token, user: safeUser };
+    return { accessToken };
   } catch (error) {
     // ✅ Known error (already has status)
     if (error.status) {

@@ -23,11 +23,16 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const user = await loginCompany(req.dto);
-
+    const { accessToken, refreshToken } = await loginCompany(req.dto);
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: 15 * 24 * 60 * 60 * 1000,
+    });
     return res.status(200).json({
       message: "login successfully.",
-      data: user,
+      data: { accessToken },
     });
   } catch (error) {
     return res.status(Number(error.status)).json({

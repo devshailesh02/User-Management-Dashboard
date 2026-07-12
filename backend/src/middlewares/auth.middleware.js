@@ -1,20 +1,13 @@
 import jwt from "jsonwebtoken";
 import { getCompanyProfile } from "../services/company.service.js";
 
-const authenticate = async (req, res, next) => {
+export const verifyRefreshToken = async (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({
-        message: "No token provided",
-      });
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+      return res.status(401).json({ message: "login required" });
     }
-
-    const token = authHeader.split(" ")[1];
-
-    const decoded = jwt.verify(token, process.env.ACCESS_JWT_SECRET);
-
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_JWT_SECRET);
     const company = await getCompanyProfile(decoded.id);
 
     if (!company) {
@@ -34,9 +27,7 @@ const authenticate = async (req, res, next) => {
     next();
   } catch (error) {
     return res.status(401).json({
-      message: "Invalid or expired token",
+      message: "Invalid or expired refresh token",
     });
   }
 };
-
-export default authenticate;
