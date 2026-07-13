@@ -5,6 +5,7 @@ import {
   deleteManyCompanyController,
   getAllCompaniesController,
   getCompanyByIdController,
+  getLoginProfileController,
   login,
   register,
   updateCompanyStatusController,
@@ -28,6 +29,7 @@ router.post("/login", validate(loginSchema), login);
 
 //-------------------------------------- authenticated routes---------------------------------------------//
 router.use(authenticate);
+router.get("/me", getLoginProfileController);
 router.get("/", authorize("superadmin"), getAllCompaniesController);
 router.get(
   "/:company_id",

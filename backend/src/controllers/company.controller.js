@@ -3,6 +3,7 @@ import {
   deleteManyCompanies,
   getAllCompanies,
   loginCompany,
+  loginCompanyProfile,
   registerCompany,
   updateCompanyStatus,
 } from "../services/company.service.js";
@@ -38,6 +39,21 @@ export const login = async (req, res, next) => {
     return res.status(Number(error.status)).json({
       message: error.message,
     });
+  }
+};
+
+//----------------------------------------------getProfilecontroller--------------------------------------------------//
+
+export const getLoginProfileController = async (req, res, next) => {
+  try {
+    const companyProfile = await loginCompanyProfile(req.company.id);
+    return res.status(200).json({
+      success: true,
+      message: "profile fetched successfully",
+      profile: companyProfile,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 //----------------------------------------------getAllCompanies--------------------------------------------------//

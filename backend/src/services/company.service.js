@@ -52,7 +52,7 @@ export const loginCompany = async (dto) => {
     const refreshToken = generateCompanyRefreshToken(user);
     const { password: _, ...safeUser } = user;
 
-    return { accessToken };
+    return { accessToken, refreshToken };
   } catch (error) {
     // ✅ Known error (already has status)
     if (error.status) {
@@ -82,6 +82,32 @@ export const getCompanyProfile = async (companyId) => {
   });
 
   return company;
+};
+
+//--------------------------------------------- loginCompanyProgile --------------------------------------------//
+export const loginCompanyProfile = (companyId) => {
+  return prisma.company.findUnique({
+    where: {
+      id: companyId,
+    },
+    omit: {
+      password: true,
+    },
+    include: {
+      roles: {
+        select: {
+          id: true,
+          name: true,
+          permissions: {
+            select: {
+              module: true,
+              action: true,
+            },
+          },
+        },
+      },
+    },
+  });
 };
 //---------------------------------------------getCompaniesService----------------------------------------------------//
 
