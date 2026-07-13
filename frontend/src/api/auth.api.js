@@ -6,7 +6,7 @@ export const refresh = async () => {
   try {
     const response = await authAxios.post(REFRESH);
     setAccessToken(response.data.accessToken);
-    return data.accessToken;
+    return response.data.accessToken;
   } catch (error) {
     console.log("error_____________________________", error);
     return;

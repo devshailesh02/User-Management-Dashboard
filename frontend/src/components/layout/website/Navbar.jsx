@@ -4,7 +4,6 @@ import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
 
   return (
     <nav className="h-16 bg-white shadow-md">
@@ -21,34 +20,9 @@ const Navbar = () => {
           <Link to="/services">Services</Link>
           <Link to="/contact">Contact</Link>
 
-          <div className="relative">
-            <button
-              onClick={() => setProfileOpen(!profileOpen)}
-              className="rounded-full p-2 transition hover:bg-gray-100"
-            >
-              <FaUserCircle className="text-2xl text-gray-700" />
-            </button>
-
-            {profileOpen && (
-              <div className="absolute right-0 mt-2 w-44 rounded-lg border border-gray-200 bg-white shadow-lg">
-                <Link
-                  to="/login"
-                  onClick={() => setProfileOpen(false)}
-                  className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
-                >
-                  Login
-                </Link>
-
-                <Link
-                  to="/signup"
-                  onClick={() => setProfileOpen(false)}
-                  className="block px-4 py-3 text-gray-700 transition hover:bg-blue-50 hover:text-blue-600"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
-          </div>
+          <button className="rounded-full p-2 hover:bg-gray-100">
+            <FaUserCircle className="text-2xl text-gray-700" />
+          </button>
         </div>
 
         {/* Mobile Button */}
@@ -64,53 +38,18 @@ const Navbar = () => {
       {/* Mobile Menu */}
       {open && (
         <div className="border-t bg-white md:hidden">
-          <div className="flex flex-col p-4 space-y-2">
-            <Link
-              to="/"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-2 text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
-            >
+          <div className="flex flex-col p-4 space-y-3">
+            <Link to="/" onClick={() => setOpen(false)}>
               Home
             </Link>
-
-            <Link
-              to="/about"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-2 text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
-            >
+            <Link to="/about" onClick={() => setOpen(false)}>
               About
             </Link>
-
-            <Link
-              to="/services"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-2 text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
-            >
+            <Link to="/services" onClick={() => setOpen(false)}>
               Services
             </Link>
-
-            <Link
-              to="/contact"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-2 text-gray-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
-            >
+            <Link to="/contact" onClick={() => setOpen(false)}>
               Contact
-            </Link>
-
-            <Link
-              to="/login"
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-4 py-2 font-medium text-blue-600 transition hover:bg-blue-50"
-            >
-              Login
-            </Link>
-
-            <Link
-              to="/signup"
-              onClick={() => setOpen(false)}
-              className="rounded-lg bg-blue-600 px-4 py-2 text-center font-medium text-white transition hover:bg-blue-700"
-            >
-              Sign Up
             </Link>
           </div>
         </div>
