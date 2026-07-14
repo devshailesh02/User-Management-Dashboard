@@ -58,6 +58,15 @@ export const loginSchema = yup.object({
   password: yup.string().required("Password is required"),
 });
 
+//------------------------------------- forgot-password-schema -----------------------------------------//
+export const forgotPasswordSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .required("Email is required")
+    .email("Invalid email address")
+    .max(254, "Email cannot exceed 254 characters"),
+});
 //------------------------------------- updateCompanyStatusSchema -----------------------------------------//
 export const updateCompanyStatusSchema = yup.object({
   status: yup.string().oneOf(Object.values(CompanyStatus)).required(),

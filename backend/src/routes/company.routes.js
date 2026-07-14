@@ -12,6 +12,7 @@ import {
 } from "../controllers/company.controller.js";
 import {
   deleteManyCompaniesSchema,
+  forgotPasswordSchema,
   loginSchema,
   registerSchema,
   updateCompanyStatusSchema,
@@ -26,7 +27,7 @@ router.use(express.json({ limit: "20kb" }));
 
 router.post("/register", validate(registerSchema), register);
 router.post("/login", validate(loginSchema), login);
-
+router.post("/forgot-passward", validate(forgotPasswordSchema));
 //-------------------------------------- authenticated routes---------------------------------------------//
 router.use(authenticate);
 router.get("/me", getLoginProfileController);
