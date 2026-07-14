@@ -9,6 +9,7 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 import { companyRegisterSchema } from "../../validationSchema/companySchema/register.schema";
+import { registerCompany } from "../../api/company.api";
 
 const Register = () => {
   const {
@@ -20,15 +21,41 @@ const Register = () => {
     handleBlur,
     handleSubmit,
     isSubmitting,
+    setFieldError,
   } = useFormik({
     initialValues: {
       name: "",
       email: "",
       password: "",
-      confirmPassword: "",
+      cnf_password: "",
     },
     validationSchema: companyRegisterSchema,
-    onSubmit: async (values, { resetForm }) => {},
+    onSubmit: async (values, { resetForm, setFieldError, setSubmitting }) => {
+      try {
+        await registerCompany(values);
+
+        resetForm();
+
+        navigate("/company/login", {
+          replace: true,
+        });
+      } catch (error) {
+        switch (error?.status) {
+          case 409:
+            setFieldError("email", "Company already registered.");
+            break;
+
+          case 400:
+            setFieldError("email", error.message);
+            break;
+
+          default:
+            alert("Something went wrong. Please try again.");
+        }
+      } finally {
+        setSubmitting(false);
+      }
+    },
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -119,7 +146,13 @@ const Register = () => {
                 placeholder="company@example.com"
                 className="w-full bg-transparent px-3 py-3 outline-none"
                 value={values.email}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+
+                  if (errors.email === "Company already registered.") {
+                    setFieldError("email", "");
+                  }
+                }}
                 onBlur={handleBlur}
                 disabled={isSubmitting}
               />
@@ -184,16 +217,16 @@ const Register = () => {
                 Confirm Password <span className="text-red-500">*</span>
               </label>
 
-              {touched.confirmPassword && errors.confirmPassword && (
+              {touched.cnf_password && errors.cnf_password && (
                 <span className="text-xs font-medium text-red-500">
-                  {errors.confirmPassword}
+                  {errors.cnf_password}
                 </span>
               )}
             </div>
 
             <div
               className={`flex items-center rounded-lg border px-3 transition ${
-                touched.confirmPassword && errors.confirmPassword
+                touched.cnf_password && errors.cnf_password
                   ? "border-red-500 ring-1 ring-red-100"
                   : "border-gray-300 focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100"
               }`}
@@ -203,10 +236,10 @@ const Register = () => {
               <input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
+                name="cnf_password"
                 placeholder="Confirm password"
                 className="w-full bg-transparent px-3 py-3 outline-none"
-                value={values.confirmPassword}
+                value={values.cnf_password}
                 onChange={handleChange}
                 onBlur={handleBlur}
                 disabled={isSubmitting}

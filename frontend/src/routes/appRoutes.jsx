@@ -8,6 +8,8 @@ import { authContext } from "../App.jsx";
 import { refresh } from "../api/auth.api.js";
 import Loader from "../components/common/loader.jsx";
 import { loginProfile } from "../api/company.api.js";
+import LoginCompany from "../pages/website/Login.jsx";
+import ForgotPassword from "../pages/website/ForgotPassword.jsx";
 
 export const AppRoutes = () => {
   const [loading, setloading] = useState(true);
@@ -34,6 +36,7 @@ export const AppRoutes = () => {
     refreshToken();
   }, []);
 
+  console.log("isAuthenticated", isAuthenticated);
   if (loading || isLoading) {
     return <Loader />;
   }
@@ -42,6 +45,8 @@ export const AppRoutes = () => {
       <Route element={<Website />}>
         <Route path="/" element={<Home />} />
         <Route path="/company/register" element={<RegisterCompany />} />
+        <Route path="/company/login" element={<LoginCompany />} />
+        <Route path="/company/forgot-password" element={<ForgotPassword />} />
       </Route>
     </Routes>
   );

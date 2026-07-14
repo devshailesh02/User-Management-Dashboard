@@ -30,7 +30,7 @@ export const companyRegisterSchema = Yup.object({
       "Password must contain at least one special character",
     ),
 
-  confirmPassword: Yup.string()
+  cnf_password: Yup.string()
     .required("Please confirm your password")
     .oneOf([Yup.ref("password")], "Passwords do not match"),
 });
