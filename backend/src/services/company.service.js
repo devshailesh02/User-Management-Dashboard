@@ -28,29 +28,30 @@ export const registerCompany = async (dto) => {
 export const loginCompany = async (dto) => {
   try {
     const { email, password } = dto;
-    const user = await prisma.company.findUnique({
+
+    const company = await prisma.company.findUnique({
       where: { email },
       include: {
         roles: true,
       },
     });
 
-    if (!user) {
+    if (!company) {
       const error = new Error("Invalid email or password");
       error.status = 401;
       throw error;
     }
 
-    const isMatch = await comparePassword(password, user.password);
+    const isMatch = await comparePassword(password, company.password);
 
     if (!isMatch) {
       const error = new Error("Invalid email or password");
       error.status = 401;
       throw error;
     }
-    const accessToken = generateCompanyAccessToken(user);
-    const refreshToken = generateCompanyRefreshToken(user);
-    const { password: _, ...safeUser } = user;
+    const accessToken = generateCompanyAccessToken(company);
+    const refreshToken = generateCompanyRefreshToken(company);
+    const { password: _, ...safeUser } = company;
 
     return { accessToken, refreshToken };
   } catch (error) {
@@ -230,3 +231,15 @@ export const deleteManyCompanies = async (companyIds) => {
     },
   });
 };
+
+//------------------------------------------------- get company by email ---------------------------------------------------//
+
+export const getCompanyByEmail = (email) =>
+  prisma.company.findUnique({
+    where: {
+      email,
+    },
+    omit: {
+      password: true,
+    },
+  });

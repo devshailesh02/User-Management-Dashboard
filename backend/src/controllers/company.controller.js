@@ -2,16 +2,18 @@ import {
   deleteCompanies,
   deleteManyCompanies,
   getAllCompanies,
+  getCompanyByEmail,
   loginCompany,
   loginCompanyProfile,
   registerCompany,
   updateCompanyStatus,
 } from "../services/company.service.js";
+import { sendEmail } from "../services/mail.service.js";
 
 //---------------------------------- register ---------------------------------------//
 export const register = async (req, res, next) => {
   try {
-    const user = await registerCompany(req.dto);
+    const user = await registerCompany(req.body);
     res.status(201).json({
       message: "registered successfully.",
     });
@@ -24,7 +26,8 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { accessToken, refreshToken } = await loginCompany(req.dto);
+    const { accessToken, refreshToken } = await loginCompany(req.body);
+
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -36,9 +39,7 @@ export const login = async (req, res, next) => {
       data: { accessToken },
     });
   } catch (error) {
-    return res.status(Number(error.status)).json({
-      message: error.message,
-    });
+    next(error);
   }
 };
 
@@ -124,4 +125,44 @@ export const deleteManyCompanyController = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+//------------------------------------------------- forgotPasswordController ---------------------------------------------------//
+
+export const forgotPasswordController = async (req, res, next) => {
+  try {
+    const company = await getCompanyByEmail(req.body.email);
+    if (!company) {
+      const error = new Error("Invalid email");
+      error.status = 404;
+      return next(error);
+    }
+    const mail = await sendEmail(
+      company?.email,
+      company?.name,
+      "http://localhost:5173/company/reset-password",
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "we have sent password-reset-link on your email.",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-------------------------------------------------  logoutCompanyController  -------------------------------------------//
+
+export const logoutCompanyController = (req, res, next) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
+
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully.",
+  });
 };

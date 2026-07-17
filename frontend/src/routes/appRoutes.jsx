@@ -10,6 +10,7 @@ import Loader from "../components/common/loader.jsx";
 import { loginProfile } from "../api/company.api.js";
 import LoginCompany from "../pages/website/Login.jsx";
 import ForgotPassword from "../pages/website/ForgotPassword.jsx";
+import ResetPassword from "../pages/website/ResetPassword.jsx";
 
 export const AppRoutes = () => {
   const [loading, setloading] = useState(true);
@@ -47,6 +48,7 @@ export const AppRoutes = () => {
         <Route path="/company/register" element={<RegisterCompany />} />
         <Route path="/company/login" element={<LoginCompany />} />
         <Route path="/company/forgot-password" element={<ForgotPassword />} />
+        <Route path="/company/reset-password" element={<ResetPassword />} />
       </Route>
     </Routes>
   );

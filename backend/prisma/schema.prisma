@@ -16,6 +16,7 @@ enum EmployeeStatus {
 }
 
 enum CompanyStatus {
+  pending
   active
   inactive
   suspended

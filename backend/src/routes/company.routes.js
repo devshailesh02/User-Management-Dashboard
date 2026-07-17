@@ -1,8 +1,13 @@
 import express from "express";
-import { validate } from "../middlewares/validate.schema.js";
+import {
+  validateBody,
+  validateQuery,
+  validateParams,
+} from "../middlewares/validate.schema.js";
 import {
   deleteCompanyController,
   deleteManyCompanyController,
+  forgotPasswordController,
   getAllCompaniesController,
   getCompanyByIdController,
   getLoginProfileController,
@@ -25,9 +30,13 @@ const router = express.Router();
 
 router.use(express.json({ limit: "20kb" }));
 
-router.post("/register", validate(registerSchema), register);
-router.post("/login", validate(loginSchema), login);
-router.post("/forgot-passward", validate(forgotPasswordSchema));
+router.post("/register", validateBody(registerSchema), register);
+router.post("/login", validateBody(loginSchema), login);
+router.post(
+  "/forgot-passward",
+  validateBody(forgotPasswordSchema),
+  forgotPasswordController,
+);
 //-------------------------------------- authenticated routes---------------------------------------------//
 router.use(authenticate);
 router.get("/me", getLoginProfileController);
@@ -42,7 +51,7 @@ router.patch(
   "/:company_id/status",
   authorize("superadmin"),
   loadCompany,
-  validate(updateCompanyStatusSchema),
+  validateBody(updateCompanyStatusSchema),
   updateCompanyStatusController,
 );
 router.delete(
@@ -54,7 +63,7 @@ router.delete(
 router.delete(
   "/",
   authorize("superadmin"),
-  validate(deleteManyCompaniesSchema),
+  validateBody(deleteManyCompaniesSchema),
   deleteManyCompanyController,
 );
 

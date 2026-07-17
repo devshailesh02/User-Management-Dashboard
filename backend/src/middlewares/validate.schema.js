@@ -1,6 +1,6 @@
-export const validate = (schema) => async (req, res, next) => {
+const validate = (schema, source) => async (req, res, next) => {
   try {
-    req.dto = await schema.validate(req.body, {
+    req[source] = await schema.validate(req[source], {
       abortEarly: false,
       stripUnknown: true,
       strict: true,
@@ -11,11 +11,8 @@ export const validate = (schema) => async (req, res, next) => {
     const validationError = new Error("Validation failed");
 
     validationError.status = 400;
-
-    // Custom flag
     validationError.type = "VALIDATION_ERROR";
 
-    // Remove duplicate errors for the same field
     const seen = new Set();
 
     validationError.errors = err.inner
@@ -32,3 +29,7 @@ export const validate = (schema) => async (req, res, next) => {
     next(validationError);
   }
 };
+
+export const validateBody = (schema) => validate(schema, "body");
+export const validateParams = (schema) => validate(schema, "params");
+export const validateQuery = (schema) => validate(schema, "query");

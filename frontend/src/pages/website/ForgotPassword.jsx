@@ -2,6 +2,8 @@ import React from "react";
 import { useFormik } from "formik";
 import { Link } from "react-router-dom";
 import { FaEnvelope, FaBuilding } from "react-icons/fa";
+import { forgotPasswordSchema } from "../../validationSchema/companySchema/forgotPasswordSchema";
+import { forgotPassword } from "../../api/company.api";
 // import { forgotPasswordSchema } from "../../validationSchema/companySchema/forgotPassword.schema";
 
 const ForgotPassword = () => {
@@ -18,12 +20,14 @@ const ForgotPassword = () => {
       email: "",
     },
 
-    // validationSchema: forgotPasswordSchema,
+    validationSchema: forgotPasswordSchema,
 
-    onSubmit: async (values) => {
-      console.log(values);
-
-      // Call Forgot Password API
+    onSubmit: async (values, { setFieldError }) => {
+      try {
+        await forgotPassword(values);
+      } catch (error) {
+        setFieldError("email", error.message);
+      }
     },
   });
 
@@ -74,7 +78,13 @@ const ForgotPassword = () => {
                 name="email"
                 placeholder="company@example.com"
                 value={values.email}
-                onChange={handleChange}
+                onChange={(e) => {
+                  handleChange(e);
+
+                  if (errors.email === "Invalid email") {
+                    setFieldError("email", "");
+                  }
+                }}
                 onBlur={handleBlur}
                 className="w-full bg-transparent px-3 py-3 outline-none"
               />

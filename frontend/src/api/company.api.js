@@ -4,6 +4,7 @@ import {
   REFRESH,
   LOGIN_COMPANY,
   REGISTER_COMPANY,
+  FORGOT_PASSWORD,
 } from "./constant";
 
 // ----------------------------------- register company-----------------------------------//
@@ -35,5 +36,16 @@ export const loginCompany = async (loginDetais) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+// -----------------------------------loginCompany-----------------------------------//
+
+export const forgotPassword = async (company_detail) => {
+  try {
+    const response = await authAxios.post(FORGOT_PASSWORD, company_detail);
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
   }
 };
