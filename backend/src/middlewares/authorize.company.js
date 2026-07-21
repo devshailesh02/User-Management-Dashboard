@@ -12,7 +12,6 @@ const authorize =
         message: "Insufficient permissions. Access denied.",
       });
     }
-
     next();
   };
 

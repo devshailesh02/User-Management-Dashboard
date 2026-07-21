@@ -55,14 +55,7 @@ export const loginCompany = async (dto) => {
 
     return { accessToken, refreshToken };
   } catch (error) {
-    // ✅ Known error (already has status)
-    if (error.status) {
-      throw error;
-    }
-    // ❌ Unknown error → convert to 500
-    const err = new Error("Internal Server Error");
-    err.status = 500;
-    throw err;
+    throw error;
   }
 };
 
@@ -243,3 +236,27 @@ export const getCompanyByEmail = (email) =>
       password: true,
     },
   });
+
+//------------------------------------------------- companyStatics ---------------------------------------------------//
+
+export const companyStatics = () =>
+  prisma.company.groupBy({
+    by: ["status"],
+    _count: true,
+  });
+
+//------------------------------------------------- employee count---------------------------------------------------//
+
+export const employeesCount = () => prisma.employee.count();
+
+//------------------------------------------------- employee count---------------------------------------------------//
+
+export const companyGrowth = () => prisma.$queryRaw`
+SELECT
+    YEAR(createdAt) AS year,
+    MONTH(createdAt) AS month,
+    CAST(COUNT(*) AS SIGNED) AS total
+FROM Company
+GROUP BY YEAR(createdAt), MONTH(createdAt)
+ORDER BY YEAR(createdAt), MONTH(createdAt)
+`;

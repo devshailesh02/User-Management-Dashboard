@@ -5,6 +5,8 @@ import {
   validateParams,
 } from "../middlewares/validate.schema.js";
 import {
+  companyGrowthController,
+  companyStaticsController,
   deleteCompanyController,
   deleteManyCompanyController,
   forgotPasswordController,
@@ -39,6 +41,11 @@ router.post(
 );
 //-------------------------------------- authenticated routes---------------------------------------------//
 router.use(authenticate);
+
+//---------------------------------- Dashboard api -----------------------------------//
+
+router.get("/statics", authorize("superadmin"), companyStaticsController);
+router.get("/growth", authorize("superadmin"), companyGrowthController);
 router.get("/me", getLoginProfileController);
 router.get("/", authorize("superadmin"), getAllCompaniesController);
 router.get(

@@ -1,6 +1,10 @@
+import { CompanyStatus } from "@prisma/client";
 import {
+  companyGrowth,
+  companyStatics,
   deleteCompanies,
   deleteManyCompanies,
+  employeesCount,
   getAllCompanies,
   getCompanyByEmail,
   loginCompany,
@@ -165,4 +169,55 @@ export const logoutCompanyController = (req, res, next) => {
     success: true,
     message: "Logged out successfully.",
   });
+};
+
+//-------------------------------------------------  companyStaticsController  -------------------------------------------//
+
+export const companyStaticsController = async (req, res, next) => {
+  try {
+    // const statics = await companyStatics();
+    // const employees = await employeesCount();
+    const [statics, employees] = await Promise.all([
+      companyStatics(),
+      employeesCount(),
+    ]);
+    const stats = { total: 0 };
+    statics.forEach(({ status, _count }) => {
+      stats.total += _count;
+      stats[status] = _count;
+    });
+    Object.values(CompanyStatus).forEach((elm) => {
+      if (!stats[elm]) {
+        stats[elm] = 0;
+        return;
+      }
+    });
+    return res.status(200).json({
+      success: true,
+      message: "company statics get successfully",
+      data: { stats, employees },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-------------------------------------------------  companyStaticsController  -------------------------------------------//
+
+export const companyGrowthController = async (req, res, next) => {
+  try {
+    const growth = await companyGrowth();
+    console.log("growth record_______________________", growth);
+    const formattedGrowth = growth.map((item) => ({
+      ...item,
+      total: Number(item.total),
+    }));
+    return res.status(200).json({
+      success: true,
+      message: "growth record fetched successfully",
+      formattedGrowth,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
