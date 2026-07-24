@@ -244,6 +244,9 @@ export const companyStatics = () =>
     by: ["status"],
     _count: true,
   });
+// prisma.$queryRaw`
+// select status, count(*) from company
+// group by status`;
 
 //------------------------------------------------- employee count---------------------------------------------------//
 

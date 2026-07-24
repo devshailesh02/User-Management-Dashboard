@@ -207,7 +207,6 @@ export const companyStaticsController = async (req, res, next) => {
 export const companyGrowthController = async (req, res, next) => {
   try {
     const growth = await companyGrowth();
-    console.log("growth record_______________________", growth);
     const formattedGrowth = growth.map((item) => ({
       ...item,
       total: Number(item.total),
