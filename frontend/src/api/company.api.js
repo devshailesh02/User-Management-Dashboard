@@ -33,6 +33,7 @@ export const loginProfile = async () => {
 export const loginCompany = async (loginDetais) => {
   try {
     const response = authAxios.post(LOGIN_COMPANY, loginDetais);
+    console.log("Response_______________________", response.data);
     return response.data;
   } catch (error) {
     throw error;

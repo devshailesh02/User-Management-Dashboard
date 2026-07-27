@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
-import { authContext } from "../../../App";
 import { logout } from "../../../api/auth.api";
+import { useAuth } from "../../../context/auth-context";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
 
-  const { isAuthenticated } = useContext(authContext);
+  const { isAuthenticated } = useAuth();
 
   const profileRef = useRef(null);
 

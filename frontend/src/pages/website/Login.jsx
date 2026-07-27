@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useFormik } from "formik";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaEnvelope,
   FaLock,
@@ -10,15 +10,18 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { companyLoginSchema } from "../../validationSchema/companySchema/companyLoginSchema";
-import { authContext } from "../../App";
 import { loginCompany } from "../../api/company.api";
+import { useAuth } from "../../context/auth-context";
 
 const Login = () => {
-  const { isAuthenticated, setAuthenticated } = useContext(authContext);
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
-  const navigate = useNavigate();
+
+  const { isAuthenticated, setAuthenticated } = useAuth();
+
+  const from = location.state?.from?.pathname || "/super-admin";
 
   const {
     values,
@@ -40,7 +43,7 @@ const Login = () => {
       try {
         const response = await loginCompany(values);
         setAuthenticated(true);
-        navigate("/", { replace: true });
+        navigate(from, { replace: true });
       } catch (error) {
         setLoginError("Invalid Credentials");
       }

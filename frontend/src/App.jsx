@@ -2,18 +2,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createContext, useEffect, useState } from "react";
 import "./App.css";
 import { AppRoutes } from "./routes/appRoutes";
+import { AuthProvider } from "./context/auth-context.jsx";
 
-export const authContext = createContext();
 const queryClient = new QueryClient();
 
 function App() {
-  const [isAuthenticated, setAuthenticated] = useState(false);
-
   return (
     <QueryClientProvider client={queryClient}>
-      <authContext.Provider value={{ isAuthenticated, setAuthenticated }}>
+      <AuthProvider>
         <AppRoutes />
-      </authContext.Provider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
