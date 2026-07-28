@@ -12,6 +12,7 @@ import {
 import { companyLoginSchema } from "../../validationSchema/companySchema/companyLoginSchema";
 import { loginCompany } from "../../api/company.api";
 import { useAuth } from "../../context/auth-context";
+import { setAccessToken } from "../../utils/token";
 
 const Login = () => {
   const location = useLocation();
@@ -19,9 +20,9 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  const { isAuthenticated, setAuthenticated } = useAuth();
+  const { setAuthenticated } = useAuth();
 
-  const from = location.state?.from?.pathname || "/super-admin";
+  // const from = location.state?.from?.pathname || "/super-admin/dashboard";
 
   const {
     values,
@@ -42,10 +43,14 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await loginCompany(values);
+
         setAuthenticated(true);
-        navigate(from, { replace: true });
+        setAccessToken(response?.accessToken);
+
+        navigate("/super-admin/dashboard", { replace: true });
       } catch (error) {
-        setLoginError("Invalid Credentials");
+        console.log("error____________________", error);
+        setLoginError(error.message);
       }
     },
   });

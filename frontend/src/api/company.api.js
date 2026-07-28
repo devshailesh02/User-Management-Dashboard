@@ -1,3 +1,4 @@
+import { handleApiError } from "../utils/handleApiError";
 import { authAxios, apiAxios } from "./axios.Instance";
 import {
   LOGIN_PROFILE,
@@ -32,11 +33,10 @@ export const loginProfile = async () => {
 
 export const loginCompany = async (loginDetais) => {
   try {
-    const response = authAxios.post(LOGIN_COMPANY, loginDetais);
-    console.log("Response_______________________", response.data);
-    return response.data;
+    const response = await authAxios.post(LOGIN_COMPANY, loginDetais);
+    return response.data?.data;
   } catch (error) {
-    throw error;
+    handleApiError(error);
   }
 };
 

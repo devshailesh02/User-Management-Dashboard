@@ -1,6 +1,23 @@
 import { FaBell, FaSearch, FaUserCircle, FaSignOutAlt } from "react-icons/fa";
+import { logout } from "../../api/auth.api";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "../../context/auth-context";
 
 const Navbar = () => {
+  const queryClient = useQueryClient();
+  const { setAuthenticated } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+
+    queryClient.removeQueries({
+      queryKey: ["login-profile"],
+    });
+
+    setAuthenticated(false);
+
+    navigate("/");
+  };
   return (
     <header className="flex h-16 items-center justify-between border-b bg-white px-6 shadow-sm">
       {/* Search */}
@@ -31,7 +48,7 @@ const Navbar = () => {
           </div>
         </div>
 
-        <button className="text-red-600 hover:text-red-700">
+        <button className="text-red-600 hover:text-red-700" onClick={logout}>
           <FaSignOutAlt size={20} />
         </button>
       </div>

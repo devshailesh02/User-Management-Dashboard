@@ -13,6 +13,9 @@ import ResetPassword from "../pages/website/ResetPassword.jsx";
 import { useAuth } from "../context/auth-context.jsx";
 import PrivateRoute from "../components/common/private-route.jsx";
 import SuperAdminLayout from "../components/layout/SuperAdminLayout.jsx";
+import Dashboard from "../pages/superadmin/Dashboard.jsx";
+import Authorize from "../components/common/Authorize.jsx";
+import Unauthorized from "../components/common/Unauthorized.jsx";
 
 export const AppRoutes = () => {
   const [loading, setloading] = useState(true);
@@ -39,10 +42,10 @@ export const AppRoutes = () => {
     refreshToken();
   }, []);
 
-  console.log("isAuthenticated", isAuthenticated);
   if (loading || isLoading) {
     return <Loader />;
   }
+
   return (
     <Routes>
       <Route element={<Website />}>
@@ -53,10 +56,13 @@ export const AppRoutes = () => {
         <Route path="/company/reset-password" element={<ResetPassword />} />
       </Route>
       <Route element={<PrivateRoute />}>
-        <Route path="/super-admin" element={<SuperAdminLayout />}>
-          {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+        <Route element={<Authorize role={["superadmin"]} />}>
+          <Route path="/super-admin" element={<SuperAdminLayout />}>
+            <Route path="dashboard" element={<Dashboard />} />
+          </Route>
         </Route>
       </Route>
+      <Route path="/unauthorized" element={<Unauthorized />} />
     </Routes>
   );
 };
