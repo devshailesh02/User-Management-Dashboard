@@ -31,9 +31,6 @@ export const loginCompany = async (dto) => {
 
     const company = await prisma.company.findUnique({
       where: { email },
-      include: {
-        roles: true,
-      },
     });
 
     if (!company) {
@@ -51,9 +48,9 @@ export const loginCompany = async (dto) => {
     }
     const accessToken = generateCompanyAccessToken(company);
     const refreshToken = generateCompanyRefreshToken(company);
-    const { password: _, ...safeUser } = company;
+    const { role } = company;
 
-    return { accessToken, refreshToken };
+    return { accessToken, refreshToken, role };
   } catch (error) {
     throw error;
   }
@@ -254,12 +251,14 @@ export const employeesCount = () => prisma.employee.count();
 
 //------------------------------------------------- employee count---------------------------------------------------//
 
-export const companyGrowth = () => prisma.$queryRaw`
+export const companyGrowth = (
+  year = new Date().getFullYear(),
+) => prisma.$queryRaw`
 SELECT
-    YEAR(createdAt) AS year,
     MONTH(createdAt) AS month,
     CAST(COUNT(*) AS SIGNED) AS total
-FROM Company
-GROUP BY YEAR(createdAt), MONTH(createdAt)
-ORDER BY YEAR(createdAt), MONTH(createdAt)
+FROM Company 
+WHERE YEAR(createdAt) = ${year}
+GROUP BY MONTH(createdAt)
+ORDER BY MONTH(createdAt)
 `;

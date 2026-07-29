@@ -95,7 +95,17 @@ const errorHandler = (err, req, res, next) => {
   if (err instanceof Prisma.PrismaClientInitializationError) {
     return res.status(500).json({
       success: false,
-      message: "Database unavailable",
+      message: "Server is busy",
+    });
+  }
+  // connection pool error**********************************//
+  if (
+    err.message?.includes("pool timeout") ||
+    err.message?.includes("failed to retrieve a connection from pool")
+  ) {
+    return res.status(503).json({
+      success: false,
+      message: "Server is busy. Please try again shortly.",
     });
   }
 

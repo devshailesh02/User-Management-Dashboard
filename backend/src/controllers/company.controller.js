@@ -30,7 +30,7 @@ export const register = async (req, res, next) => {
 
 export const login = async (req, res, next) => {
   try {
-    const { accessToken, refreshToken } = await loginCompany(req.body);
+    const { accessToken, refreshToken, role } = await loginCompany(req.body);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
@@ -40,7 +40,7 @@ export const login = async (req, res, next) => {
     });
     return res.status(200).json({
       message: "login successfully.",
-      data: { accessToken },
+      data: { accessToken, role },
     });
   } catch (error) {
     next(error);
@@ -206,9 +206,45 @@ export const companyStaticsController = async (req, res, next) => {
 
 export const companyGrowthController = async (req, res, next) => {
   try {
-    const growth = await companyGrowth();
+    let { year } = req.query;
+
+    // Convert query string to number
+    year = year ? Number(year) : new Date().getFullYear();
+
+    // Validation
+    if (!Number.isInteger(year)) {
+      return res.status(400).json({
+        success: false,
+        message: "Year must be an integer",
+      });
+    }
+
+    const currentYear = new Date().getFullYear();
+
+    if (year < 2025 || year > currentYear) {
+      return res.status(400).json({
+        success: false,
+        message: `Year must be between 2025 and ${currentYear}`,
+      });
+    }
+    const months = [
+      "",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const growth = await companyGrowth(year);
     const formattedGrowth = growth.map((item) => ({
-      ...item,
+      label: months[item.month],
       total: Number(item.total),
     }));
     return res.status(200).json({
