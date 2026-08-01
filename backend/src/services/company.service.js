@@ -146,31 +146,50 @@ export const getAllCompanies = async ({
     }
 
     if (endDate) {
-      // Optional: make endDate inclusive
       const end = new Date(endDate);
       end.setDate(end.getDate() + 1);
-
       where.createdAt.lt = end;
     }
   }
 
-  return prisma.company.findMany({
-    where,
-    skip: (page - 1) * Number(limit),
-    take: Number(limit),
-    orderBy: {
-      [sortBy]: order,
+  const currentPage = Number(page);
+  const pageSize = Number(limit);
+
+  const [companies, total] = await prisma.$transaction([
+    prisma.company.findMany({
+      where,
+      skip: (currentPage - 1) * pageSize,
+      take: pageSize,
+      orderBy: {
+        [sortBy]: order,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    }),
+
+    prisma.company.count({
+      where,
+    }),
+  ]);
+
+  return {
+    companies,
+    pagination: {
+      total,
+      page: currentPage,
+      limit: pageSize,
+      totalPages: Math.ceil(total / pageSize),
+      hasNextPage: currentPage < Math.ceil(total / pageSize),
+      hasPreviousPage: currentPage > 1,
     },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      status: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-  });
+  };
 };
 
 //---------------------------------------------- updateCompanyService -------------------------------------------------//
@@ -266,34 +285,42 @@ ORDER BY MONTH(createdAt)
 
 //-------------------------------------------------getrecentcompanies---------------------------------------------------//
 export const getRecentCompanies = (limit = 10) => {
-  return prisma.company.findMany({
-    where: {
-      deletedAt: null,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: limit,
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      status: true,
-      createdAt: true,
-    },
-  });
+  return Promise.all([
+    prisma.company.count({
+      where: {
+        status: "pending",
+      },
+    }),
+    prisma.company.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        status: true,
+        createdAt: true,
+      },
+    }),
+  ]);
 };
 
 //------------------------------------------------- employee count---------------------------------------------------//
 
 export const getSuperAdmindashboard = async () => {
-  const [stats, recentCompanies] = await Promise.all([
+  const [stats, [pending, recentCompanies]] = await Promise.all([
     Statics(),
     getRecentCompanies(),
   ]);
 
   return {
     stats,
+    pending,
     recentCompanies,
   };
 };

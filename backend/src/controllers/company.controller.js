@@ -92,7 +92,7 @@ export const updateCompanyStatusController = async (req, res, next) => {
   try {
     const company = await updateCompanyStatus(
       req.targetCompany.id,
-      req.dto.status,
+      req.body.status,
     );
 
     return res.status(200).json({
