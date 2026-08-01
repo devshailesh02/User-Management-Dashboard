@@ -1,3 +1,4 @@
+import { CompanyStatus } from "@prisma/client";
 import prisma from "../config/prisma.js";
 import { comparePassword, hashPassword } from "../utils/hash.js";
 import {
@@ -262,3 +263,56 @@ WHERE YEAR(createdAt) = ${year}
 GROUP BY MONTH(createdAt)
 ORDER BY MONTH(createdAt)
 `;
+
+//-------------------------------------------------getrecentcompanies---------------------------------------------------//
+export const getRecentCompanies = (limit = 10) => {
+  return prisma.company.findMany({
+    where: {
+      deletedAt: null,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      status: true,
+      createdAt: true,
+    },
+  });
+};
+
+//------------------------------------------------- employee count---------------------------------------------------//
+
+export const getSuperAdmindashboard = async () => {
+  const [stats, recentCompanies] = await Promise.all([
+    Statics(),
+    getRecentCompanies(),
+  ]);
+
+  return {
+    stats,
+    recentCompanies,
+  };
+};
+//----------------------------------------------- company statics ---------------------------------------//
+export const Statics = async () => {
+  const [statics, employees] = await Promise.all([
+    companyStatics(),
+    employeesCount(),
+  ]);
+  const stats = { total: 0 };
+  statics.forEach(({ status, _count }) => {
+    stats.total += _count;
+    stats[status] = _count;
+  });
+  Object.values(CompanyStatus).forEach((elm) => {
+    if (!stats[elm]) {
+      stats[elm] = 0;
+      return;
+    }
+  });
+  return { stats, employees };
+};

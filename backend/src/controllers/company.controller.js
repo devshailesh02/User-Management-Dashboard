@@ -7,6 +7,7 @@ import {
   employeesCount,
   getAllCompanies,
   getCompanyByEmail,
+  getSuperAdmindashboard,
   loginCompany,
   loginCompanyProfile,
   registerCompany,
@@ -242,15 +243,46 @@ export const companyGrowthController = async (req, res, next) => {
       "Nov",
       "Dec",
     ];
+    const monthvalue = {};
     const growth = await companyGrowth(year);
-    const formattedGrowth = growth.map((item) => ({
-      label: months[item.month],
-      total: Number(item.total),
-    }));
+    const formattedGrowth = growth.map((item) => {
+      monthvalue[months[item.month]] = {
+        label: months[item.month],
+        total: Number(item.total),
+      };
+      return {
+        label: months[item.month],
+        total: Number(item.total),
+      };
+    });
+    const returngrowth = [];
+    const date = new Date().getMonth() + 1;
+    for (let i = 1; i < date; i++) {
+      if (!monthvalue[months[i]]) {
+        returngrowth.push({ label: months[i], total: 0 });
+      } else {
+        returngrowth.push(monthvalue[months[i]]);
+      }
+    }
     return res.status(200).json({
       success: true,
       message: "growth record fetched successfully",
-      formattedGrowth,
+      growth: returngrowth,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//-------------------------------------------------  superAdminDashboardController  -------------------------------------------//
+
+export const superAdminDashboardController = async (req, res, next) => {
+  try {
+    const dashboard = await getSuperAdmindashboard();
+    return res.status(200).json({
+      success: true,
+      message: "Dashboard data fetched successfully",
+      data: dashboard,
     });
   } catch (error) {
     next(error);

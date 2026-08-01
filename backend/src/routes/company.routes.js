@@ -15,6 +15,7 @@ import {
   getLoginProfileController,
   login,
   register,
+  superAdminDashboardController,
   updateCompanyStatusController,
 } from "../controllers/company.controller.js";
 import {
@@ -43,7 +44,11 @@ router.post(
 router.use(authenticate);
 
 //---------------------------------- Dashboard api -----------------------------------//
-
+router.get(
+  "/super-admin/dashboard",
+  authorize("superadmin"),
+  superAdminDashboardController,
+);
 router.get("/statics", authorize("superadmin"), companyStaticsController);
 router.get("/growth", authorize("superadmin"), companyGrowthController);
 router.get("/me", getLoginProfileController);
