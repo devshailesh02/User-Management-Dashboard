@@ -1,12 +1,29 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
-const Table = ({ title, columns, data, renderRow, action }) => {
+const Table = ({
+  title,
+  columns,
+  data,
+  renderRow,
+  action,
+  pendingApproval,
+}) => {
   return (
     <div className="rounded-xl bg-white shadow">
       {/* Header */}
       <div className="flex items-center justify-between border-b px-6 py-4">
         <h2 className="text-lg font-semibold text-gray-800">{title}</h2>
-
+        {pendingApproval ? (
+          <Link
+            to="/super-admin/companies?status=pending"
+            className="rounded-full bg-yellow-100 px-3 py-1 text-xs font-semibold text-yellow-700 transition hover:bg-yellow-200"
+          >
+            Pending Approval →
+          </Link>
+        ) : (
+          ""
+        )}
         {action}
       </div>
 

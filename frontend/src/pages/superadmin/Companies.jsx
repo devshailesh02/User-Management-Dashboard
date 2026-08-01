@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CompanyFilters from "../../components/superadmin/CompanyFilters";
 import CompaniesTable from "../../components/superadmin/CompaniesTable";
 import Pagination from "../../components/common/Pagination";
@@ -8,20 +8,22 @@ import { useSearchParams } from "react-router-dom";
 
 export const Companies = () => {
   const [searchParam, setSearchParam] = useSearchParams();
+  const queryString = searchParam.toString();
+
   const { data: companies } = useQuery({
-    queryKey: ["companies"],
+    queryKey: ["companies", queryString],
     queryFn: () => getCompanyList(searchParam),
     staleTime: 1000 * 60 * 5,
   });
   return (
     <>
       <CompanyFilters />
-      <CompaniesTable companies={companies} />
+      <CompaniesTable companies={companies?.companies} />
       <Pagination
-      // currentPage={pagination.page}
-      // totalPages={pagination.totalPages}
-      // total={pagination.total}
-      // limit={pagination.limit}
+        currentPage={companies?.pagination.page}
+        totalPages={companies?.pagination.totalPages}
+        total={companies?.pagination.total}
+        limit={companies?.pagination.limit}
       />
 
       {/* Company Table */}

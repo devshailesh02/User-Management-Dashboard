@@ -8,6 +8,7 @@ import {
   FORGOT_PASSWORD,
   SUPER_ADMIN_DASHBOARD,
   COMPANY_GROWTH,
+  COMPANIES_LIST,
 } from "./constant";
 
 // ----------------------------------- register company-----------------------------------//
@@ -81,8 +82,29 @@ export const getCompanyList = async (searchParams) => {
     const response = await apiAxios.get(COMPANIES_LIST, {
       params: searchParams,
     });
+    return response.data.companies;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
 
-    return response.data.data;
+// -----------------------------------getCompanyDetail-----------------------------------//
+
+export const getCompanyDetail = async (company_id) => {
+  try {
+    const response = await apiAxios.get(`${COMPANIES_LIST}/${company_id}`);
+    return response.data.company;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+// -----------------------------------upadateCompanyStatus-----------------------------------//
+
+export const upadateCompanyStatus = async (status, id) => {
+  try {
+    const response = await apiAxios.patch(`companies/${id}/status`, { status });
+    return response.data;
   } catch (error) {
     handleApiError(error);
   }

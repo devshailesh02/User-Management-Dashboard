@@ -35,7 +35,10 @@ const Dashboard = () => {
 
       <StatCards stats={data?.stats} />
       <CompanyGrowthChart data={{ growth, year, setYear }} />
-      <RecentCompanies companies={data?.recentCompanies} />
+      <RecentCompanies
+        companies={data?.recentCompanies}
+        pendingApproval={data?.pending}
+      />
     </div>
   );
 };
