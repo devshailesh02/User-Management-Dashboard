@@ -6,6 +6,8 @@ import {
   LOGIN_COMPANY,
   REGISTER_COMPANY,
   FORGOT_PASSWORD,
+  SUPER_ADMIN_DASHBOARD,
+  COMPANY_GROWTH,
 } from "./constant";
 
 // ----------------------------------- register company-----------------------------------//
@@ -48,5 +50,40 @@ export const forgotPassword = async (company_detail) => {
     return response.data;
   } catch (error) {
     throw error.response.data;
+  }
+};
+
+// -----------------------------------getSuperAdmindashboard-----------------------------------//
+
+export const getSuperAdminDashboard = async () => {
+  try {
+    const response = await apiAxios.get(SUPER_ADMIN_DASHBOARD);
+    return response.data.data;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+// -----------------------------------getSuperAdmindashboard-----------------------------------//
+export const companyGrowth = async (year) => {
+  try {
+    const response = await apiAxios.get(`${COMPANY_GROWTH}?year=${year}`);
+    return response.data?.growth;
+  } catch (error) {
+    handleApiError(error);
+  }
+};
+
+// -----------------------------------getCompaniesList-----------------------------------//
+
+export const getCompanyList = async (searchParams) => {
+  try {
+    const response = await apiAxios.get(COMPANIES_LIST, {
+      params: searchParams,
+    });
+
+    return response.data.data;
+  } catch (error) {
+    handleApiError(error);
   }
 };

@@ -16,6 +16,7 @@ import SuperAdminLayout from "../components/layout/SuperAdminLayout.jsx";
 import Dashboard from "../pages/superadmin/Dashboard.jsx";
 import Authorize from "../components/common/Authorize.jsx";
 import Unauthorized from "../components/common/Unauthorized.jsx";
+import { Companies } from "../pages/superadmin/Companies.jsx";
 
 export const AppRoutes = () => {
   const [loading, setloading] = useState(true);
@@ -59,6 +60,7 @@ export const AppRoutes = () => {
         <Route element={<Authorize role={["superadmin"]} />}>
           <Route path="/super-admin" element={<SuperAdminLayout />}>
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="companies" element={<Companies />} />
           </Route>
         </Route>
       </Route>

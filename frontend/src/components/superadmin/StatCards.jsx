@@ -13,28 +13,28 @@ const StatCards = ({ stats }) => {
   const cards = [
     {
       title: "Total Companies",
-      value: stats?.total ?? 0,
+      value: stats?.stats._count ?? 0,
       icon: <FaBuilding />,
       iconBg: "bg-blue-100",
       iconColor: "text-blue-600",
     },
     {
       title: "Active Companies",
-      value: stats?.active ?? 0,
+      value: stats?.stats.active ?? 0,
       icon: <FaCheckCircle />,
       iconBg: "bg-green-100",
       iconColor: "text-green-600",
     },
     {
       title: "Pending Companies",
-      value: stats?.pending ?? 0,
+      value: stats?.stats.pending ?? 0,
       icon: <FaClock />,
       iconBg: "bg-yellow-100",
       iconColor: "text-yellow-600",
     },
     {
       title: "Suspended Companies",
-      value: stats?.suspended ?? 0,
+      value: stats?.stats.suspended ?? 0,
       icon: <FaBan />,
       iconBg: "bg-red-100",
       iconColor: "text-red-600",

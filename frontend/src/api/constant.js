@@ -4,3 +4,6 @@ export const LOGIN_PROFILE = "companies/me";
 export const LOGIN_COMPANY = "companies/login";
 export const REGISTER_COMPANY = "companies/register";
 export const FORGOT_PASSWORD = "/companies/forgot-passward";
+export const SUPER_ADMIN_DASHBOARD = "/companies/super-admin/dashboard";
+export const COMPANY_GROWTH = "/companies/growth";
+export const COMPANIES_LIST = "/companies";
