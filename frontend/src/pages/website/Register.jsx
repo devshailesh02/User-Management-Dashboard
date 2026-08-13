@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useFormik } from "formik";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaBuilding,
   FaEnvelope,
@@ -12,6 +12,7 @@ import { companyRegisterSchema } from "../../validationSchema/companySchema/regi
 import { registerCompany } from "../../api/company.api";
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     values,
     errors,
@@ -32,26 +33,26 @@ const Register = () => {
     validationSchema: companyRegisterSchema,
     onSubmit: async (values, { resetForm, setFieldError, setSubmitting }) => {
       try {
-        await registerCompany(values);
-
+        const data = await registerCompany(values);
         resetForm();
 
         navigate("/company/login", {
           replace: true,
         });
       } catch (error) {
-        switch (error?.status) {
-          case 409:
-            setFieldError("email", "Company already registered.");
-            break;
+        alert(error?.message);
+        // switch (error?.status) {
+        //   case 409:
+        //     setFieldError("email", "Company already registered.");
+        //     break;
 
-          case 400:
-            setFieldError("email", error.message);
-            break;
+        //   case 400:
+        //     setFieldError("email", error.message);
+        //     break;
 
-          default:
-            alert("Something went wrong. Please try again.");
-        }
+        //   default:
+        //     alert("Something went wrong. Please try again.");
+        // }
       } finally {
         setSubmitting(false);
       }

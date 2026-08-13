@@ -9,7 +9,8 @@ export const refresh = async () => {
     return response.data.accessToken;
   } catch (error) {
     console.log("error_____________________________", error);
-    return;
+    // return;
+    throw error;
   }
 };
 

@@ -17,7 +17,7 @@ export const registerCompany = async (company_details) => {
     const response = await authAxios.post(REGISTER_COMPANY, company_details);
     return response.data;
   } catch (error) {
-    throw { status: error.response.status, message: error.response.data };
+    handleApiError(error);
   }
 };
 
@@ -28,13 +28,17 @@ export const refreshToken = () => authAxios.post(REFRESH);
 // -----------------------------------loginProfile-----------------------------------//
 
 export const loginProfile = async () => {
-  const response = await apiAxios.get(LOGIN_PROFILE);
-  return response.data.profile;
+  try {
+    const response = await apiAxios.get(LOGIN_PROFILE);
+    return response.data.profile;
+  } catch (error) {
+    handleApiError(error);
+  }
 };
 
 // -----------------------------------loginCompany-----------------------------------//
 
-export const loginCompany = async (loginDetais) => {
+export const loginCompany = async (loginDetais, param) => {
   try {
     const response = await authAxios.post(LOGIN_COMPANY, loginDetais);
     return response.data?.data;

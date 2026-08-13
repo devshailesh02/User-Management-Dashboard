@@ -36,9 +36,15 @@ export const AppRoutes = () => {
 
   useEffect(() => {
     const refreshToken = async () => {
-      const token = await refresh();
-      setAuthenticated(!!token);
-      setloading(false);
+      try {
+        const token = await refresh();
+        setAuthenticated(!!token);
+        setloading(false);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setloading(false);
+      }
     };
     refreshToken();
   }, []);
