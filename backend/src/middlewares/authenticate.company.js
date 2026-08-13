@@ -14,7 +14,6 @@ const authenticate = async (req, res, next) => {
     const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, process.env.ACCESS_JWT_SECRET);
-
     const company = await getCompanyProfile(decoded.id);
 
     if (!company) {
@@ -33,6 +32,8 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch (error) {
+    console.log("decoded____________________", error);
+
     next(error);
   }
 };

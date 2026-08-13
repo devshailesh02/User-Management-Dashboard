@@ -1,4 +1,5 @@
 import multer from "multer";
+import jwt from "jsonwebtoken";
 import { Prisma } from "@prisma/client";
 
 const errorHandler = (err, req, res, next) => {
@@ -119,7 +120,22 @@ const errorHandler = (err, req, res, next) => {
       ...(err.errors && { errors: err.errors }),
     });
   }
+  /**
+   * jwt Errors
+   */
+  if (err instanceof jwt.TokenExpiredError) {
+    return res.status(401).json({
+      success: false,
+      message: "Access token expired",
+    });
+  }
 
+  if (err instanceof jwt.JsonWebTokenError) {
+    return res.status(401).json({
+      success: false,
+      message: "Invalid access token",
+    });
+  }
   /**
    * Unknown Errors
    */

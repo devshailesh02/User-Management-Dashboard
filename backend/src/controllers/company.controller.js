@@ -19,6 +19,7 @@ import { sendEmail } from "../services/mail.service.js";
 export const register = async (req, res, next) => {
   try {
     const user = await registerCompany(req.body);
+    console.log("user_______________", user);
     res.status(201).json({
       message: "registered successfully.",
     });

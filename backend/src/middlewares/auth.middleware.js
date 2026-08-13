@@ -11,7 +11,7 @@ export const verifyRefreshToken = async (req, res, next) => {
     const company = await getCompanyProfile(decoded.id);
 
     if (!company) {
-      return res.status(401).json({
+      return res.status(404).json({
         message: "Company account not found.",
       });
     }
