@@ -49,7 +49,6 @@ const Login = () => {
 
         navigate("/super-admin/dashboard", { replace: true });
       } catch (error) {
-        console.log("error____________________", error);
         setLoginError(error.message);
       }
     },

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Website from "../layouts/WebsiteLayout.jsx";
 import Home from "../pages/website/Home.jsx";

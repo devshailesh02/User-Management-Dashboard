@@ -1,9 +1,7 @@
 import axios from "axios";
 import { getAccessToken, setAccessToken } from "../utils/token";
 
-// *************************************** auth axios ******************************************//
-
-export const authAxios = axios.create({
+const config = {
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
   withCredentials: true,
@@ -11,26 +9,18 @@ export const authAxios = axios.create({
     "Content-Type": "application/json",
     Accept: "application/json",
   },
-});
+};
+// *************************************** auth axios ******************************************//
+export const authAxios = axios.create(config);
 
 // *************************************** api axios ******************************************//
-
-export const apiAxios = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  timeout: 10000,
-  withCredentials: true,
-  headers: {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  },
-});
+export const apiAxios = axios.create(config);
 
 // ------------------------ Request ------------------------
 
 apiAxios.interceptors.request.use(
   (config) => {
     const token = getAccessToken();
-
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

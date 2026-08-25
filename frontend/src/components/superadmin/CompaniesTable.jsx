@@ -39,9 +39,14 @@ const CompaniesTable = ({ companies = [] }) => {
               </tr>
             </thead>
             {companies.length === 0 ? (
-              <div className="p-10 text-center text-gray-500">
-                No companies found.
-              </div>
+              <tr className="p-10 text-center text-gray-500">
+                <td
+                  colSpan={5}
+                  className="px-6 py-10 text-center text-gray-500"
+                >
+                  No companies found.
+                </td>
+              </tr>
             ) : (
               <>
                 <tbody>
