@@ -4,7 +4,6 @@ import { getCompanyProfile } from "../services/company.service.js";
 const authenticate = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({
         message: "No token provided",
