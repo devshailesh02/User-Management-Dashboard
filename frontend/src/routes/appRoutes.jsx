@@ -1,26 +1,47 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+
+// Layouts
 import Website from "../layouts/WebsiteLayout.jsx";
-import Home from "../pages/website/Home.jsx";
-import RegisterCompany from "../pages/website/Register.jsx";
-import { refresh } from "../api/auth.api.js";
-import Loader from "../components/common/loader.jsx";
-import { loginProfile } from "../api/company.api.js";
-import LoginCompany from "../pages/website/Login.jsx";
-import ForgotPassword from "../pages/website/ForgotPassword.jsx";
-import ResetPassword from "../pages/website/ResetPassword.jsx";
-import { useAuth } from "../context/auth-context.jsx";
-import PrivateRoute from "../components/common/private-route.jsx";
 import SuperAdminLayout from "../components/layout/SuperAdminLayout.jsx";
-import Dashboard from "../pages/superadmin/Dashboard.jsx";
+
+// Context
+import { useAuth } from "../context/auth-context.jsx";
+
+// APIs
+import { refresh } from "../api/auth.api.js";
+import { loginProfile } from "../api/company.api.js";
+
+// Common components
+import Loader from "../components/common/loader.jsx";
+import PrivateRoute from "../components/common/private-route.jsx";
 import Authorize from "../components/common/Authorize.jsx";
 import Unauthorized from "../components/common/Unauthorized.jsx";
-import { Companies } from "../pages/superadmin/Companies.jsx";
+
+// Lazy loaded pages
+
+// Website
+const Home = lazy(() => import("../pages/website/Home.jsx"));
+const RegisterCompany = lazy(() => import("../pages/website/Register.jsx"));
+const LoginCompany = lazy(() => import("../pages/website/Login.jsx"));
+const ForgotPassword = lazy(
+  () => import("../pages/website/ForgotPassword.jsx"),
+);
+const ResetPassword = lazy(() => import("../pages/website/ResetPassword.jsx"));
+
+// Super Admin
+const Dashboard = lazy(() => import("../pages/superadmin/Dashboard.jsx"));
+const Companies = lazy(() => import("../pages/superadmin/Companies.jsx"));
+const ProfileSettings = lazy(
+  () => import("../pages/superadmin/ProfileSettings.jsx"),
+);
 
 export const AppRoutes = () => {
-  const [loading, setloading] = useState(true);
+  const [loading, setLoading] = useState(true);
+
   const { isAuthenticated, setAuthenticated } = useAuth();
+
   const {
     data: profile,
     isLoading,
@@ -38,39 +59,58 @@ export const AppRoutes = () => {
     const refreshToken = async () => {
       try {
         const token = await refresh();
+
         setAuthenticated(!!token);
-        setloading(false);
       } catch (error) {
         console.log(error);
+        setAuthenticated(false);
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     };
+
     refreshToken();
-  }, []);
+  }, [setAuthenticated]);
 
   if (loading || isLoading) {
     return <Loader />;
   }
 
   return (
-    <Routes>
-      <Route element={<Website />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/company/register" element={<RegisterCompany />} />
-        <Route path="/company/login" element={<LoginCompany />} />
-        <Route path="/company/forgot-password" element={<ForgotPassword />} />
-        <Route path="/company/reset-password" element={<ResetPassword />} />
-      </Route>
-      <Route element={<PrivateRoute />}>
-        <Route element={<Authorize role={["superadmin"]} />}>
-          <Route path="/super-admin" element={<SuperAdminLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="companies" element={<Companies />} />
+    <Suspense fallback={<Loader />}>
+      <Routes>
+        {/* ==================== WEBSITE ==================== */}
+
+        <Route element={<Website />}>
+          <Route path="/" element={<Home />} />
+
+          <Route path="/company/register" element={<RegisterCompany />} />
+
+          <Route path="/company/login" element={<LoginCompany />} />
+
+          <Route path="/company/forgot-password" element={<ForgotPassword />} />
+
+          <Route path="/company/reset-password" element={<ResetPassword />} />
+        </Route>
+
+        {/* ==================== PRIVATE ROUTES ==================== */}
+
+        <Route element={<PrivateRoute />}>
+          <Route element={<Authorize role={["superadmin"]} />}>
+            <Route path="/super-admin" element={<SuperAdminLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+
+              <Route path="companies" element={<Companies />} />
+
+              <Route path="settings/profile" element={<ProfileSettings />} />
+            </Route>
           </Route>
         </Route>
-      </Route>
-      <Route path="/unauthorized" element={<Unauthorized />} />
-    </Routes>
+
+        {/* ==================== UNAUTHORIZED ==================== */}
+
+        <Route path="/unauthorized" element={<Unauthorized />} />
+      </Routes>
+    </Suspense>
   );
 };

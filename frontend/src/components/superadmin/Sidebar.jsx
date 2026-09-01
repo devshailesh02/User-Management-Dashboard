@@ -31,7 +31,7 @@ const menus = [
   {
     name: "Settings",
     icon: <FaCog />,
-    path: "/super-admin/settings",
+    path: "/super-admin/settings/profile",
   },
 ];
 

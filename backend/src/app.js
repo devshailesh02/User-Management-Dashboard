@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import errorHandler from "./middlewares/error.middleware.js";
 import companyRoutes from "./routes/company.routes.js";
 import roleRoutes from "./routes/role.routes.js";
-import userRoutes from "./routes/user.routes.js";
+// import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
@@ -73,7 +73,7 @@ app.use("/uploads", express.static("upload"));
 app.use("/companies", companyRoutes);
 app.use("/roles", roleRoutes);
 app.use("/auth", authRoutes);
-app.use("/user", userRoutes);
+// app.use("/user", userRoutes);
 
 /**
  * ❤️ Health Check Route

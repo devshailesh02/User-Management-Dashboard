@@ -9,12 +9,13 @@ import { useSearchParams } from "react-router-dom";
 export const Companies = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const queryString = searchParam.toString();
-
-  const { data: companies } = useQuery({
+  const { data: companies, error } = useQuery({
     queryKey: ["companies", queryString],
     queryFn: () => getCompanyList(searchParam),
     staleTime: 1000 * 60 * 5,
   });
+  console.log("ERROR_________________________________________", error);
+
   return (
     <>
       <CompanyFilters />

@@ -48,7 +48,7 @@ const SuperAdminMenu = ({ profile, closeMenu, onLogout }) => {
       </Link>
 
       <Link
-        to="/super-admin/settings"
+        to="/super-admin/settings/profile"
         onClick={closeMenu}
         className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100"
       >
