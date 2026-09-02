@@ -1,6 +1,5 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 
 // Layouts
 import Website from "../layouts/WebsiteLayout.jsx";
@@ -8,10 +7,6 @@ import SuperAdminLayout from "../components/layout/SuperAdminLayout.jsx";
 
 // Context
 import { useAuth } from "../context/auth-context.jsx";
-
-// APIs
-import { refresh } from "../api/auth.api.js";
-import { loginProfile } from "../api/company.api.js";
 
 // Common components
 import Loader from "../components/common/loader.jsx";
@@ -38,41 +33,9 @@ const ProfileSettings = lazy(
 );
 
 export const AppRoutes = () => {
-  const [loading, setLoading] = useState(true);
+  const { isAuthenticated, ProfileLoading, authLoading, profile } = useAuth();
 
-  const { isAuthenticated, setAuthenticated } = useAuth();
-
-  const {
-    data: profile,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ["login-profile"],
-    queryFn: loginProfile,
-    enabled: isAuthenticated,
-    retry: false,
-    staleTime: Infinity,
-  });
-
-  useEffect(() => {
-    const refreshToken = async () => {
-      try {
-        const token = await refresh();
-
-        setAuthenticated(!!token);
-      } catch (error) {
-        console.log(error);
-        setAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    refreshToken();
-  }, [setAuthenticated]);
-
-  if (loading || isLoading) {
+  if (authLoading || ProfileLoading) {
     return <Loader />;
   }
 
@@ -82,7 +45,7 @@ export const AppRoutes = () => {
         {/* ==================== WEBSITE ==================== */}
 
         <Route element={<Website />}>
-          <Route path="/" element={<Home />} />
+          <Route index element={<Home />} />
 
           <Route path="/company/register" element={<RegisterCompany />} />
 

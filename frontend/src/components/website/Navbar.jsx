@@ -36,9 +36,7 @@ const Navbar = () => {
   const handleLogout = async () => {
     await logout();
 
-    queryClient.removeQueries({
-      queryKey: ["login-profile"],
-    });
+    queryClient.clear();
 
     setAuthenticated(false);
 
