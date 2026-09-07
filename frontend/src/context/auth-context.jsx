@@ -21,6 +21,7 @@ export function AuthProvider({ children }) {
     retry: false,
     staleTime: Infinity,
   });
+
   useEffect(() => {
     const refreshToken = async () => {
       try {
