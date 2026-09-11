@@ -28,6 +28,8 @@ import {
 import authenticate from "../middlewares/authenticate.company.js";
 import authorize from "../middlewares/authorize.company.js";
 import { loadCompany } from "../middlewares/loadCompany.js";
+import { profileConfig } from "../config/upload.config.js";
+import validateFile from "../middlewares/validateFile.js";
 
 const router = express.Router();
 
@@ -77,6 +79,12 @@ router.delete(
   authorize("superadmin"),
   validateBody(deleteManyCompaniesSchema),
   deleteManyCompanyController,
+);
+
+router.post(
+  "/me/profile-image",
+  uploadAvatar.single("avatar"),
+  validateFile(profileConfig),
 );
 
 export default router;

@@ -8,7 +8,7 @@ const validateFileSignature = async (
   const detectedType = await fileTypeFromBuffer(buffer);
 
   if (!detectedType) {
-    throw new Error("Unable to determine actual file type");
+    throw new Error("Please upload a valid image, video, or document.");
   }
 
   const isValidMime = allowedMimeTypes.includes(detectedType.mime);
