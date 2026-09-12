@@ -4,6 +4,7 @@ export const profileConfig = {
   allowedExtensions: [".jpg", ".jpeg", ".png", ".webp"],
 
   maxFileSize: 2 * 1024 * 1024, // 2 MB,
+  fileCount: 1,
 };
 
 export const documentConfig = {
@@ -16,6 +17,7 @@ export const documentConfig = {
   allowedExtensions: [".pdf", ".doc", ".docx"],
 
   maxFileSize: 5 * 1024 * 1024, // 5 MB
+  fileCount: 1,
 };
 
 export const companyLogoConfig = {
@@ -24,4 +26,6 @@ export const companyLogoConfig = {
   allowedExtensions: [".jpg", ".jpeg", ".png", ".webp"],
 
   maxFileSize: 2 * 1024 * 1024, // 2 MB
+
+  fileCount: 1,
 };

@@ -1,5 +1,5 @@
 import { fileTypeFromBuffer } from "file-type";
-import validateFileSignature from "./upload/validateFileSignature";
+import validateFileSignature from "./upload/validateFileSignature.js";
 
 const validateFile = ({ allowedMimeTypes, allowedExtensions }) => {
   return async (req, res, next) => {

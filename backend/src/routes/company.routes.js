@@ -30,6 +30,7 @@ import authorize from "../middlewares/authorize.company.js";
 import { loadCompany } from "../middlewares/loadCompany.js";
 import { profileConfig } from "../config/upload.config.js";
 import validateFile from "../middlewares/validateFile.js";
+import { uploadAvatar } from "../middlewares/upload/uploadMiddleware.js";
 
 const router = express.Router();
 

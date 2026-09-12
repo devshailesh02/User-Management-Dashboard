@@ -2,7 +2,12 @@ import multer from "multer";
 import path from "path";
 
 //  * Reusable multer factory *
-const createMulter = ({ allowedMimeTypes, allowedExtensions, maxFileSize }) => {
+const createMulter = ({
+  allowedMimeTypes,
+  allowedExtensions,
+  maxFileSize,
+  fileCount,
+}) => {
   //  * Store file in memory temporarily *
   const storage = multer.memoryStorage();
 
