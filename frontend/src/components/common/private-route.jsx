@@ -9,7 +9,7 @@ const PrivateRoute = () => {
   if (!isAuthenticated) {
     return <Navigate to="/company/login" replace state={{ from: location }} />;
   }
-
+  console.log("location.pathname", location.pathname);
   return <Outlet />;
 };
 

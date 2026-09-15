@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { loginProfile } from "../api/company.api";
 import { refresh } from "../api/auth.api";
+import { setAccessToken } from "../utils/token";
 
 const AuthContext = createContext();
 
@@ -25,23 +26,36 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const refreshToken = async () => {
       try {
-        const token = await refresh();
-
-        setAuthenticated(!!token);
+        const response = await refresh();
+        login(response.accessToken);
       } catch (error) {
-        console.log(error);
-        setAuthenticated(false);
+        logout();
       } finally {
         setLoading(false);
       }
     };
 
     refreshToken();
-  }, [setAuthenticated]);
+  }, []);
+  const login = (token) => {
+    setAuthenticated(true);
+    setAccessToken(token);
+  };
+  const logout = () => {
+    setAuthenticated(false);
+    setAccessToken(null);
+  };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, ProfileLoading, authLoading, profile }}
+      value={{
+        isAuthenticated,
+        ProfileLoading,
+        authLoading,
+        profile,
+        login,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

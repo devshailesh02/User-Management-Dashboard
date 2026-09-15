@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 // Layouts
 import Website from "../layouts/WebsiteLayout.jsx";
@@ -49,7 +49,10 @@ export const AppRoutes = () => {
 
           <Route path="/company/register" element={<RegisterCompany />} />
 
-          <Route path="/company/login" element={<LoginCompany />} />
+          <Route
+            path="/company/login"
+            element={isAuthenticated ? <Navigate to="/" /> : <LoginCompany />}
+          />
 
           <Route path="/company/forgot-password" element={<ForgotPassword />} />
 

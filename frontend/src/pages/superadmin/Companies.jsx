@@ -26,8 +26,6 @@ export const Companies = () => {
         total={companies?.pagination.total}
         limit={companies?.pagination.limit}
       />
-
-      {/* Company Table */}
     </>
   );
 };
