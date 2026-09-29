@@ -4,7 +4,6 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const Authorize = ({ role = [] }) => {
   const queryClient = useQueryClient();
-
   // Get cached profile
   const profile = queryClient.getQueryData(["login-profile"]);
 

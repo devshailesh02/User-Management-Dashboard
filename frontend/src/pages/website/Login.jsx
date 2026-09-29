@@ -20,7 +20,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  const { setAuthenticated } = useAuth();
+  const { setAuthenticated, login } = useAuth();
 
   // const from = location.state?.from?.pathname || "/super-admin/dashboard";
 
@@ -43,9 +43,9 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await loginCompany(values);
-
-        setAuthenticated(true);
-        setAccessToken(response?.accessToken);
+        login(response?.accessToken);
+        // setAuthenticated(true);
+        // setAccessToken(response?.accessToken);
 
         navigate("/super-admin/dashboard", { replace: true });
       } catch (error) {

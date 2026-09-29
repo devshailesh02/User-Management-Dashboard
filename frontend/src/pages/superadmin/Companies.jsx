@@ -6,16 +6,20 @@ import { useQuery } from "@tanstack/react-query";
 import { getCompanyList } from "../../api/company.api";
 import { useSearchParams } from "react-router-dom";
 
-export const Companies = () => {
+const Companies = () => {
   const [searchParam, setSearchParam] = useSearchParams();
   const queryString = searchParam.toString();
-  const { data: companies, error } = useQuery({
+  const {
+    data: companies,
+    error,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: ["companies", queryString],
     queryFn: () => getCompanyList(searchParam),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 5, // 5 minute
   });
-  console.log("ERROR_________________________________________", error);
-
+  console.log("isLoading", isLoading, "isFetching", isFetching);
   return (
     <>
       <CompanyFilters />
@@ -29,3 +33,5 @@ export const Companies = () => {
     </>
   );
 };
+
+export default Companies;
