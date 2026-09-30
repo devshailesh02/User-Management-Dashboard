@@ -33,9 +33,9 @@ const ProfileSettings = lazy(
 );
 
 export const AppRoutes = () => {
-  const { isAuthenticated, ProfileLoading, authLoading, profile } = useAuth();
+  const { isAuthenticated, loading, profile } = useAuth();
 
-  if (authLoading || ProfileLoading) {
+  if (loading) {
     return <Loader />;
   }
 

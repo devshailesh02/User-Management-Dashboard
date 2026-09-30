@@ -44,9 +44,6 @@ const Login = () => {
       try {
         const response = await loginCompany(values);
         login(response?.accessToken);
-        // setAuthenticated(true);
-        // setAccessToken(response?.accessToken);
-
         navigate("/super-admin/dashboard", { replace: true });
       } catch (error) {
         setLoginError(error.message);

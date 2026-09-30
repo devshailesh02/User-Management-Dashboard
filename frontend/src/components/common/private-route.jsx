@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/auth-context";
 

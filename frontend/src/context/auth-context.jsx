@@ -12,7 +12,7 @@ export function AuthProvider({ children }) {
 
   const {
     data: profile,
-    isLoading: ProfileLoading,
+    isLoading,
     isError,
     error,
   } = useQuery({
@@ -50,8 +50,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         isAuthenticated,
-        ProfileLoading,
-        authLoading,
+        loading: isLoading || authLoading,
         profile,
         login,
         logout,
