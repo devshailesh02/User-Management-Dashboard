@@ -53,6 +53,7 @@ export const loginCompany = async (dto) => {
 
     return { accessToken, refreshToken, role };
   } catch (error) {
+    console.log("Error occurred while logging in company:", error);
     throw error;
   }
 };
