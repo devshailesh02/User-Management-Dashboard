@@ -53,7 +53,7 @@ export function AuthProvider({ children }) {
         loading: isLoading || authLoading,
         profile,
         login,
-        logout,
+        authLogout: logout,
       }}
     >
       {children}

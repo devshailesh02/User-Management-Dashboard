@@ -12,7 +12,6 @@ import {
 import { companyLoginSchema } from "../../validationSchema/companySchema/companyLoginSchema";
 import { loginCompany } from "../../api/company.api";
 import { useAuth } from "../../context/auth-context";
-import { setAccessToken } from "../../utils/token";
 
 const Login = () => {
   const location = useLocation();

@@ -21,7 +21,7 @@ const CompanyAdminMenu = ({ profile, closeMenu, onLogout }) => {
       </div>
 
       <Link
-        to="/admin/dashboard"
+        to="/super-admin/dashboard"
         onClick={closeMenu}
         className="flex items-center gap-3 px-4 py-3 hover:bg-gray-100"
       >
